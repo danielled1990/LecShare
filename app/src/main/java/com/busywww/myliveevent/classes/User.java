@@ -19,6 +19,7 @@ public class User extends SqlConnection {
         StringBuilder query = new StringBuilder();
         String kaki;
         String kaki2;
+        String kakiwitheggplant;
          int i;
         query.append("SELECT email, password ");
         query.append("FROM userinfo ");
