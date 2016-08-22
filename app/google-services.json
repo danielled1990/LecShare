@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "723215143038",
+    "project_id": "try2forstreaming"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723215143038:android:5249caed31f5ea36",
+        "android_client_info": {
+          "package_name": "com.busywww.myliveevent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723215143038-dv9er98gpll7marrv96le6prgo1q8te5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.busywww.myliveevent",
+            "certificate_hash": "AACEC27B3AC8021E80A98F79983CA5A572132A9A"
+          }
+        },
+        {
+          "client_id": "723215143038-g76re5dlmkm7cdbno0pk3bvedvlr7q55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.busywww.myliveevent",
+            "certificate_hash": "DB3E59E02CE94CE08062BBA76AEFD75DD2E6C5E7"
+          }
+        },
+        {
+          "client_id": "723215143038-8ohvrbdjv753bcu2c7r90nf7lecjul6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.busywww.myliveevent",
+            "certificate_hash": "8FA0AD19C78B80489D3B3CDB56DB9B05B3EF852F"
+          }
+        },
+        {
+          "client_id": "723215143038-tv3t04kkk7cvbifmatugsle3vso3c94s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqAIoUaUFGuaBM1HReVw4gt7EYyPC2lTE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

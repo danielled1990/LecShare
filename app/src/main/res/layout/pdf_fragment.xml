@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/pdf_fragment"
+    android:layout_gravity="center_horizontal|top"
+    android:background="#e2f4fb"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:weightSum="1">
+
+
+    <ImageView
+        android:id="@+id/imageSlide"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#ffcaca" />
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:measureWithLargestChild="true"
+        android:background="#e5caf2"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal|bottom">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:id="@+id/next"
+            android:layout_gravity="right|center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="Previous"
+            android:id="@+id/previous" />
+
+        <!--<ImageButton-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:src="@mipmap/ic_pdf_buttn"-->
+        <!--android:text="getPdf"-->
+        <!--android:id="@+id/buttonPdf"-->
+        <!--android:layout_gravity="right|bottom" />-->
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

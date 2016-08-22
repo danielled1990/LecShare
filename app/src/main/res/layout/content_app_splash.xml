@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.busywww.myliveevent.AppSplash"
+    tools:showIn="@layout/activity_app_splash">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layoutContents"
+        android:weightSum="100"
+        android:background="@color/bwd4">
+
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutAccount">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false" >
+
+                <ImageView
+                    android:layout_width="@dimen/width_64"
+                    android:layout_height="@dimen/width_40"
+                    android:id="@+id/imageView4"
+                    android:src="@drawable/youtube_logo_light_128x80" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Live Streaming"
+                    android:id="@+id/textView2"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/bwff" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account name."
+                android:id="@+id/textViewAccountName"
+                android:textStyle="bold"
+                android:textColor="?colorPrimary"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/width_4"
+                android:layout_marginTop="@dimen/width_2" />
+
+        </RelativeLayout>
+
+        <fragment
+            android:id="@+id/list_fragment"
+            android:name="com.busywww.myliveevent.classes.EventsListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_event_list" />
+
+    </LinearLayout>
+
+</RelativeLayout>

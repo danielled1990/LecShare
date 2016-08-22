@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="event_status">
+        <!--<item>all</item>-->
+        <item>active</item>
+        <item>completed</item>
+        <item>upcoming</item>
+    </string-array>
+
+
+
+</resources>

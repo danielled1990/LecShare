@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutAdContainer"
+    android:layout_width="@dimen/width_320"
+    android:layout_height="wrap_content"
+    android:background="@color/bw00_60"
+    android:clickable="true"
+    android:padding="1dp">
+
+    <LinearLayout
+        android:id="@+id/layoutAdText"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/str_linkforapps"
+            android:id="@+id/textViewLinkToApps"
+            android:focusableInTouchMode="true"
+            android:hapticFeedbackEnabled="true"
+            android:textColor="@color/bwff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutAdButton"
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical|right"
+        android:layout_gravity="right">
+        <ImageButton
+            android:layout_height="48dp"
+            android:scaleType="fitXY"
+            android:layout_width="48dp"
+            android:id="@+id/imgbtnLinkToApps"
+            android:background="@drawable/btn_download_up" />
+    </LinearLayout>
+
+
+</FrameLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <android.support.v4.view.ViewPager android:id="@+id/view_pager" android:layout_height="500dp" android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:background="#dfc7ed" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Create your schedule"
+        android:id="@+id/semester_sched"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        android:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#4c4b4b" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Begin"
+        android:id="@+id/begin_sem"
+        android:onClick="setDate"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/show_end"
+        android:layout_toStartOf="@+id/show_end"
+        android:layout_marginRight="22dp"
+        android:layout_marginEnd="22dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End"
+        android:id="@+id/end_sem"
+        android:onClick="setDate"
+        android:layout_below="@+id/show_begin"
+        android:layout_alignLeft="@+id/save_button"
+        android:layout_alignStart="@+id/save_button"
+        android:layout_marginLeft="46dp"
+        android:layout_marginStart="46dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/show_begin"
+        android:layout_above="@+id/begin_sem"
+        android:layout_alignRight="@+id/begin_sem"
+        android:layout_alignEnd="@+id/begin_sem"
+        android:layout_marginBottom="64dp"
+        android:textColor="@color/black"
+        android:textSize="23sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/show_end"
+        android:layout_alignTop="@+id/show_begin"
+        android:layout_alignLeft="@+id/end_sem"
+        android:layout_alignStart="@+id/end_sem"
+        android:textColor="@color/black"
+        android:textSize="23sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/save_button"
+        android:background="#7dd74c"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/begin_sem"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
+    tools:context="com.busywww.myliveevent.AppSplash">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_app_splash" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="?colorPrimary"
+        android:src="@drawable/ic_action_refresh" />
+
+    <RelativeLayout
+        android:id="@+id/layoutAdContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/bw00_60"
+        android:clickable="true"
+        android:padding="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|left">
+
+        <LinearLayout
+            android:id="@+id/layoutAdText"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/width_24"
+            android:layout_toRightOf="@+id/layoutAdButton"
+            android:layout_marginRight="@dimen/width_24">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="@string/str_linkforapps"
+                android:id="@+id/textViewLinkToApps"
+                android:focusableInTouchMode="true"
+                android:hapticFeedbackEnabled="true"
+                android:textColor="@color/bwff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutAdButton"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical|right"
+            android:layout_gravity="right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="false">
+            <ImageButton
+                android:layout_height="48dp"
+                android:scaleType="fitXY"
+                android:layout_width="48dp"
+                android:id="@+id/imgbtnLinkToApps"
+                android:background="@drawable/btn_download_up" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutAdSplash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="false">
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="colorPrimary">#37474f</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#d80042</color>
+    <color name="colorSecondary">#546e7a</color>
+    <color name="colorPrimaryDarkDark">#102121</color>
+    <color name="colorPrimary_60">#6037474f</color>
+    <color name="colorPrimary_9e">#9e37474f</color>
+
+    <color name="dark_gray">#606060</color>
+    <color name="white">#ffffff</color>
+    <color name="bw00_10">#20000000</color>
+    <color name="bw00_20">#20000000</color>
+    <color name="bw00_40">#40000000</color>
+    <color name="bw00_60">#60000000</color>
+    <color name="bw00_9e">#9e000000</color>
+    <color name="bw00_d4">#d4000000</color>
+    <color name="bw00_ee">#ee000000</color>
+    <color name="bwff_60">#60ffffff</color>
+    <color name="bwff_9e">#9effffff</color>
+    <color name="blue2D_60">#606bb3e6</color>
+    <color name="blue2D_9e">#9e6bb3e6</color>
+    <color name="redD_60">#60cd3500</color>
+    <color name="redD_9e">#9ecd3500</color>
+    <color name="redD_d4">#d4cd3500</color>
+    <color name="redD_ee">#eecd3500</color>
+    <color name="redDD_60">#60a52b00</color>
+    <color name="green2D_9e">#9ea0cb1c</color>
+    <color name="green2D_60">#60a0cb1c</color>
+    <color name="bw00">#000000</color>
+    <color name="bw10">#101010</color>
+    <color name="bw20">#202020</color>
+    <color name="bw40">#404040</color>
+    <color name="bw45">#454545</color>
+    <color name="bw55">#555555</color>
+    <color name="bw50">#505050</color>
+    <color name="bw60">#606060</color>
+    <color name="bw70">#707070</color>
+    <color name="bw80">#808080</color>
+    <color name="bw9e">#9e9e9e</color>
+    <color name="bwd4">#d4d4d4</color>
+    <color name="bwee">#eeeeee</color>
+    <color name="bwff">#ffffff</color>
+    <color name="orange">#ff9c00</color>
+    <color name="orangeL">#ffce88</color>
+    <color name="orangeD">#d88400</color>
+    <color name="orangeDD">#a56500</color>
+    <color name="red">#ff4200</color>
+    <color name="redL">#ff8d65</color>
+    <color name="redD">#cd3500</color>
+    <color name="redDD">#a52b00</color>
+    <color name="green">#c0ff00</color>
+    <color name="greenL">#e0ff81</color>
+    <color name="greenD">#a4d900</color>
+    <color name="greenDD">#7ca500</color>
+    <color name="blue">#01b4ff</color>
+    <color name="blueL">#80d9ff</color>
+    <color name="blueD">#0099d9</color>
+    <color name="blueDD">#0075a5</color>
+    <color name="purple">#e400ff</color>
+    <color name="purpleL">#f180ff</color>
+    <color name="purpleD">#c200d9</color>
+    <color name="purpleDD">#9400a5</color>
+    <color name="yellow">#fff000</color>
+    <color name="yellowL">#fff881</color>
+    <color name="yellowD">#d6ca00</color>
+    <color name="yellowDD">#a59c00</color>
+    <color name="cyan">#00f0ff</color>
+    <color name="cyanL">#80f8ff</color>
+    <color name="cyanD">#00cbd8</color>
+    <color name="cyanDD">#009da7</color>
+    <color name="red2">#ff004e</color>
+    <color name="red2L">#ff81a7</color>
+    <color name="red2D">#d80042</color>
+    <color name="red2DD">#a50033</color>
+
+    <!-- <color name="blue2">#77c7ffabd5ff</color> -->
+    <color name="blue2">#abdcff</color>
+    <color name="blue2D">#6bb3e6</color>
+    <color name="blue2DD">#5995be</color>
+    <color name="blue2DDD">#48789a</color>
+    <color name="purple2">#e88eff</color>
+    <color name="purple2D">#d07fe4</color>
+    <color name="purple2DD">#af6bc0</color>
+    <color name="purple2DDD">#8c569a</color>
+    <color name="green2">#bcef21</color>
+    <color name="green2D">#a0cb1c</color>
+    <color name="green2DD">#82a517</color>
+    <color name="green2DDD">#637e11</color>
+    <color name="orange2">#ffb017</color>
+    <color name="orange2D">#e49e15</color>
+    <color name="orange2DD">#be8311</color>
+    <color name="orange2DDD">#9a6a0e</color>
+    <color name="yellow2">#fbed0b</color>
+    <color name="yellow2D">#e6d90a</color>
+    <color name="yellow2DD">#cdc109</color>
+    <color name="yellow2DDD">#a79d07</color>
+    <color name="black_overlay">#66000000</color>
+
+    <color name="grid_line">#33FFFFFF</color>
+
+    <color name="colorPrimaryCor">#2e7e00</color>
+    <color name="colorPrimaryDarkCor">#82649e</color>
+    <color name="colorAccentCor">#8ae86d</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="transparent">#00c0c0c0</color>
+    <color name="black">#000000</color>
+    <color name="grey">#2a2828</color>
+    <color name="dark_purple">#8302c3</color>
+    <color name="redCor">#e92020</color>
+
+</resources>

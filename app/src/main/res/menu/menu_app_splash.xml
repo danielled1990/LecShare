@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.busywww.myliveevent.AppSplash">
+    <item
+        android:id="@+id/action_account"
+        android:orderInCategory="90"
+        android:title="@string/action_account"
+        android:icon="@drawable/ic_user_account_light"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="@string/action_help"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_credit"
+        android:orderInCategory="110"
+        android:title="@string/action_credit"
+        app:showAsAction="never" />
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:orderInCategory="110"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="never" />-->
+</menu>

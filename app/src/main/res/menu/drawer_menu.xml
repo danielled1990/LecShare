@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/home_id" android:title="Home Page"
+            android:icon="@drawable/home_icon"></item>
+        <item android:id="@+id/search_id" android:title="Search Class"
+            android:icon="@drawable/search_icon"></item>
+        <item android:id="@+id/edit_id" android:title="Edit Details"
+            android:icon="@drawable/edit_icon"></item>
+        <item android:id="@+id/delete_id" android:title="Delete"
+            android:icon="@drawable/delete_icon"></item>
+        <item android:id="@+id/calender_id" android:title="Calender"
+            android:icon="@drawable/calendar_icon"></item>
+    </group>
+
+    <item android:title="social">
+        <menu>
+            <item android:title="Logout" android:id="@+id/logout_id"
+                android:icon="@drawable/logout_icon"></item>
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutPopupTitle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top|left"
+    android:layout_marginLeft="0dp"
+    android:visibility="visible"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/bw00_9e">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutTitleContainer"
+        android:layout_marginLeft="@dimen/width_24"
+        android:layout_marginRight="@dimen/width_24">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutTitle"
+            android:padding="@dimen/width_8"
+            android:background="?colorPrimary">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EVENT TITLE"
+                android:textColor="@color/bwff"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imageView3"
+                android:layout_marginLeft="@dimen/width_8" />
+
+            <ImageButton
+                android:id="@+id/btnClosePopup"
+                android:layout_width="@dimen/width_32"
+                android:layout_height="@dimen/width_32"
+                android:layout_gravity="right|center_vertical"
+                android:scaleType="fitXY"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutContents"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutTitle"
+            android:background="@color/bw9e"
+            android:padding="@dimen/width_16">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextTitle"
+                android:maxLines="2"
+                android:lines="2"
+                android:text="my live event title" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="@dimen/width_104"
+                android:layout_height="@dimen/width_40"
+                android:text="Update"
+                android:id="@+id/btnUpdate"
+                android:layout_alignParentBottom="false"
+                android:layout_centerHorizontal="true"
+                android:background="?colorPrimary"
+                android:textColor="@color/bwee"
+                android:layout_marginBottom="@dimen/width_8"
+                android:layout_marginTop="@dimen/width_16"
+                android:layout_below="@+id/editTextTitle" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
