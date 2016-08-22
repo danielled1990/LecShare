@@ -20,7 +20,7 @@ public class User extends SqlConnection {
         String kaki;
         String kaki2;
         String kakiwitheggplant;
-         int i;
+         int i,j;
         query.append("SELECT email, password ");
         query.append("FROM userinfo ");
         query.append(String.format("WHERE email = '%s';", email));
