@@ -17,7 +17,7 @@ public class User extends SqlConnection {
         boolean flag = false;
         //We'll use a query to get the infromation we want to initialize a user with
         StringBuilder query = new StringBuilder();
-
+        String kaki;
         query.append("SELECT email, password ");
         query.append("FROM userinfo ");
         query.append(String.format("WHERE email = '%s';", email));
