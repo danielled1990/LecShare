@@ -14,7 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
-import com.busywww.myliveevent.LecShareContext;
+import com.busywww.myliveevent.LecShare;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
@@ -41,13 +41,13 @@ public class Authorization  {
         }
 
         public boolean isLoggedIn() {
-            Context context = LecShareContext.getAppContext();
+            Context context = LecShare.getAppContext();
             SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
             return !TextUtils.isEmpty(prefs.getString("access_token", null));
         }
 
         public void addToHttpURLConnection(HttpURLConnection conn) {
-            Context context =LecShareContext.getAppContext();
+            Context context = LecShare.getAppContext();
             SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
             String accessToken = prefs.getString("access_token", null);
 
@@ -60,7 +60,7 @@ public class Authorization  {
         }
 
         public void saveRefreshToken(String refreshToken, String accessToken, long expiresIn) {
-            Context context = LecShareContext.getAppContext();
+            Context context = LecShare.getAppContext();
             context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0)
                     .edit()
                     .putString("access_token", accessToken)
@@ -70,7 +70,7 @@ public class Authorization  {
         }
 
         public String requestNewAccessToken() {
-            Context context = LecShareContext.getAppContext();
+            Context context = LecShare.getAppContext();
             SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
             String refreshToken = prefs.getString("refresh_token", null);
 
@@ -144,7 +144,7 @@ public class Authorization  {
             String tokenType        = root.getString("token_type");
             String accountUsername  = root.getString("account_username");
 
-            Context context = LecShareContext.getAppContext();
+            Context context = LecShare.getAppContext();
             context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0)
                     .edit()
                     .putString("access_token", accessToken)
@@ -156,7 +156,7 @@ public class Authorization  {
         }
 
         public void logout() {
-            Context context = LecShareContext.getAppContext();
+            Context context = LecShare.getAppContext();
             context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0)
                     .edit()
                     .clear()
