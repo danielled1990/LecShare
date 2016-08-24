@@ -210,8 +210,11 @@ public class PdfView extends android.app.Fragment {
         REQ_HEIGHT = slideView.getHeight();
 
         mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_4444);
-        new MyImgurUploadTask(mBitmap).execute();
-        Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
+        new MyImgurUploadTask(mBitmap,mImgurUrl).execute();
+        if(mImgurUrl!=null)
+      //  Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
+
+
 
         pdfImagePages.add(currentPage,mBitmap);
 
@@ -252,8 +255,12 @@ public class PdfView extends android.app.Fragment {
     }
 
     private class MyImgurUploadTask extends ImgurUploadTask {
-        public MyImgurUploadTask(Bitmap bitmap) {
+        private String mImgurUrl;
+        public MyImgurUploadTask(Bitmap bitmap,String mImgurUrl) {
+
             super(mBitmap, getActivity());
+            this.mImgurUrl = mImgurUrl;
+
         }
         @Override
         protected void onPreExecute() {
@@ -278,6 +285,7 @@ public class PdfView extends android.app.Fragment {
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
+                Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
              //   }
             } else {
                 mImgurUrl = null;
