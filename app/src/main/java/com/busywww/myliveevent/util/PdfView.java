@@ -278,7 +278,7 @@ public class PdfView extends android.app.Fragment {
             super.onPostExecute(imageId);
             mImgurUploadTask = null;
             if (imageId != null) {
-                mImgurUrl = "http://imgur.com/" + imageId;
+                mImgurUrl = "http://imgur.com/" + imageId+".png";
                // setImgurUploadStatus(R.string.choose_image_upload_status_success);
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);

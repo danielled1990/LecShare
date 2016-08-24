@@ -42,8 +42,10 @@ import android.widget.Toast;
 
 import com.busywww.myliveevent.ImgurLogin.Authorization;
 import com.busywww.myliveevent.classes.AspectFrameLayout;
+import com.busywww.myliveevent.classes.LessonUpload;
 import com.busywww.myliveevent.classes.MyCameraHelper;
 import com.busywww.myliveevent.classes.MyCameraPreview;
+import com.busywww.myliveevent.classes.UploadLessonToSql;
 import com.busywww.myliveevent.util.PdfPlayer;
 import com.busywww.myliveevent.classes.YouTubeApi;
 import com.busywww.myliveevent.classes.YouTubeStreamer;
@@ -124,7 +126,8 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     private PdfView pdfView;
     private WebSocketsUtil mWebSocketsUtil = new WebSocketsUtil();
     private ImageButton getPdf;
-
+    private String videoID;
+    private boolean mWasStreamed = false;
 
 
 
@@ -337,6 +340,11 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public void onDestroy() {
 
         super.onDestroy();
+       if(mWasStreamed){
+            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",1);
+            upload.execute();
+        }
+
     }
 
     @Override
@@ -988,6 +996,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                                 imageButtonStart.setImageResource(R.mipmap.ic_action_pause);
                                 mChronometer.setBase(SystemClock.elapsedRealtime());
                                 mChronometer.start();
+                                mWasStreamed = true;
                             }
                         });
 
