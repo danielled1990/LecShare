@@ -14,6 +14,7 @@ public class PdfPlayer {
     private int mSeconds;
     private int mHours;
     private int mPage;
+    private String mImageUrl;
 
 
     public PdfPlayer()
@@ -24,23 +25,25 @@ public class PdfPlayer {
         mPage = 0;
 
     }
-    public PdfPlayer(int hours,int minutes,int seconds,int page)
+    public PdfPlayer(int hours,int minutes,int seconds,int page,String imageLink)
     {
 
         mMinutes = minutes;
         mHours = hours;
         mSeconds = seconds;
         mPage = page;
+        mImageUrl = imageLink;
 
     }
 
-    public PdfPlayer(long timeElapsed,int page)
+    public PdfPlayer(long timeElapsed,int page,String imageLink)
     {
 
         mHours = (int) (timeElapsed / 3600000);
         mMinutes = (int) (timeElapsed - mHours * 3600000) / 60000;
         mSeconds = (int) (timeElapsed - mHours * 3600000 - mMinutes * 60000) / 1000;
         mPage = page;
+        mImageUrl = imageLink;
 
     }
 

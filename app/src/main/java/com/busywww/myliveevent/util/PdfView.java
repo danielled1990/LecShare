@@ -57,7 +57,7 @@ public class PdfView extends android.app.Fragment {
 
     public interface OnPdfPageChangedListener
     {
-        public void onPageChanged(int page);
+        public void onPageChanged(int page,String mImageUrl);
 
     }
 
@@ -111,7 +111,7 @@ public class PdfView extends android.app.Fragment {
 
                             currentPage++;
                             showImage();
-                            onPdfPageChangeListener.onPageChanged(currentPage);
+                            onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl);
 
 
                         } catch (IOException e) {
@@ -135,7 +135,7 @@ public class PdfView extends android.app.Fragment {
 
                     currentPage--;
                     showImage();
-                    onPdfPageChangeListener.onPageChanged(currentPage);
+                    onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl);
 
                 } catch (IOException e) {
                     e.printStackTrace();

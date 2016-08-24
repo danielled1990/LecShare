@@ -171,10 +171,10 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     }
 
     @Override
-    public void onPageChanged(int page) {
+    public void onPageChanged(int page,String imageLink) {
         if(mIsStreaming)
         {
-            pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page));
+            pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
             SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
             upload.execute();
             Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
