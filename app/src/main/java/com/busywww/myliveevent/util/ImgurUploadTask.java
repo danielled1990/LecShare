@@ -24,7 +24,7 @@ import java.util.Scanner;
 public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
 
     private static final String TAG = ImgurUploadTask.class.getSimpleName();
-
+    private int i;
     private static final String UPLOAD_URL = "https://api.imgur.com/3/image";
 
     private Activity mActivity;
