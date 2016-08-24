@@ -73,7 +73,7 @@ public class PdfView extends android.app.Fragment {
     public ArrayList<Bitmap> pdfImagePages;
 
   //  private Uri mImagePdfUri;
-    private String mImgurUrl;
+    private String mImageUrl;
 
     private MyImgurUploadTask mImgurUploadTask;
     //private int mImgurUploadStatus;
@@ -210,9 +210,9 @@ public class PdfView extends android.app.Fragment {
         REQ_HEIGHT = slideView.getHeight();
 
         mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_4444);
-        new MyImgurUploadTask(mBitmap,mImgurUrl).execute();
-        if(mImgurUrl!=null)
-      //  Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
+        new MyImgurUploadTask(mBitmap).execute();
+        if(mImageUrl!=null)
+        Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImageUrl, Toast.LENGTH_LONG).show();
 
 
 
@@ -256,10 +256,8 @@ public class PdfView extends android.app.Fragment {
 
     private class MyImgurUploadTask extends ImgurUploadTask {
         private String mImgurUrl;
-        public MyImgurUploadTask(Bitmap bitmap,String mImgurUrl) {
-
+        public MyImgurUploadTask(Bitmap bitmap) {
             super(mBitmap, getActivity());
-            this.mImgurUrl = mImgurUrl;
 
         }
         @Override
@@ -285,11 +283,12 @@ public class PdfView extends android.app.Fragment {
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
-                Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
+                PdfView.this.mImageUrl = mImgurUrl;
+               // Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
              //   }
             } else {
                 mImgurUrl = null;
-                Toast.makeText(getActivity(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
 
                 //setImgurUploadStatus(R.string.choose_image_upload_status_failure);
                /* if (isResumed()) {
@@ -304,18 +303,7 @@ public class PdfView extends android.app.Fragment {
         }
     }
 
-//    private void setImgurUploadStatus(int stringResId) {
-//        mImgurUploadStatus = stringResId;
-//        if (getView() != null) {
-//            TextView status = (TextView) getView().findViewById(R.id.choose_image_upload_status);
-//            if (stringResId > 0) {
-//                status.setVisibility(View.VISIBLE);
-//                status.setText(stringResId);
-//            } else {
-//                status.setVisibility(View.GONE);
-//            }
-//        }
-//    }
+
 
 
 }
