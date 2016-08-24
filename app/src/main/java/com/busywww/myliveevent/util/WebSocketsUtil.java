@@ -23,7 +23,7 @@ public class WebSocketsUtil {
     private URI uri;
     private int pageIndex;
     public void connectToWebSocketServer(){
-        String url = "ws://192.168.194.99:8080/firstStreamingTry/online";
+        String url = "ws://192.168.194.59:8080/firstStreamingTry/online";
         final String TAG1 = "connectToWebSocketServer";
         try {
             this.uri = new URI(url);
