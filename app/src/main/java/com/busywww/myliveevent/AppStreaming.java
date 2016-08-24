@@ -340,7 +340,9 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public void onDestroy() {
 
         super.onDestroy();
-       if(mWasStreamed){
+
+        if(mWasStreamed){
+            AppPreview.onCapturePhotoListener.onCapturePhoto(AppPreview.CapturedPhotos);
             UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",1);
             upload.execute();
         }

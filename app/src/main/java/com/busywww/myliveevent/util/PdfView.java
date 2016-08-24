@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 
 import com.busywww.myliveevent.R;
+import com.busywww.myliveevent.classes.MyCameraPreview;
 import com.busywww.myliveevent.util.PdfPlayer;
 import com.busywww.myliveevent.util.AppShared;
 import com.busywww.myliveevent.util.W_ImgFilePathUtil;
@@ -51,7 +52,7 @@ import java.util.ArrayList;
 /**
  * Created by Alona on 8/16/2016.
  */
-public class PdfView extends android.app.Fragment {
+public class PdfView extends android.app.Fragment implements MyCameraPreview.OnCapturePhotoListener {
 
 
 
@@ -71,18 +72,32 @@ public class PdfView extends android.app.Fragment {
     private static String mPdfurl ="";
     OnPdfPageChangedListener onPdfPageChangeListener;
     public ArrayList<Bitmap> pdfImagePages;
+    public ArrayList<String> CapturedImageURL;
+    private boolean photoTaken = false;
 
   //  private Uri mImagePdfUri;
     private String mImageUrl;
 
     private MyImgurUploadTask mImgurUploadTask;
-    //private int mImgurUploadStatus;
+    private String mCapturedImageURL;
     private Bitmap mBitmap;
 
 
     public void SetPathToPdf(String path)
     {
         mSrcPath = path;
+    }
+
+    @Override
+    public void onCapturePhoto(ArrayList<Bitmap> capturedPhotos)
+    {
+        photoTaken = true;
+        for (int i =0 ;i<capturedPhotos.size();i++)
+        {
+            new MyImgurUploadTask(capturedPhotos.get(i)).execute();
+            CapturedImageURL.add(mCapturedImageURL);
+        }
+
     }
 
 
@@ -95,6 +110,7 @@ public class PdfView extends android.app.Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        CapturedImageURL = new ArrayList<>();
         pdfImagePages = new ArrayList<>();
         slideView = (ImageView)view.findViewById(R.id.imageSlide);
         startFileExplorer();
@@ -158,6 +174,7 @@ public class PdfView extends android.app.Fragment {
         }
 
     }
+
 
     private void startFileExplorer(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -254,7 +271,7 @@ public class PdfView extends android.app.Fragment {
         pdfrender();
     }
 
-    private class MyImgurUploadTask extends ImgurUploadTask {
+    public class MyImgurUploadTask extends ImgurUploadTask {
         private String mImgurUrl;
         public MyImgurUploadTask(Bitmap bitmap) {
             super(mBitmap, getActivity());
@@ -283,7 +300,15 @@ public class PdfView extends android.app.Fragment {
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
-                PdfView.this.mImageUrl = mImgurUrl;
+                if(photoTaken)
+                {
+                    PdfView.this.mCapturedImageURL = mImgurUrl;
+                }
+                else
+                {
+                    PdfView.this.mImageUrl = mImgurUrl;
+                }
+
                // Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
              //   }
             } else {

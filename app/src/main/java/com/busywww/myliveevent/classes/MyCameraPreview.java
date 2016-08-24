@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +22,7 @@ import com.busywww.myliveevent.AppStreaming;
 import com.busywww.myliveevent.util.AppShared;
 import com.busywww.myliveevent.util.Helper;
 import com.busywww.myliveevent.util.UtilGraphic;
+import com.google.common.collect.ArrayTable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,7 +47,15 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
         public void NewFrameImage(Bitmap bitmap);
     }
 
+    public interface OnCapturePhotoListener
+    {
+        public void onCapturePhoto(ArrayList<Bitmap> capturedPhotos);
 
+    }
+
+
+    public OnCapturePhotoListener onCapturePhotoListener;
+    public static ArrayList<Bitmap> CapturedPhotos;
     public static boolean mTakePhoto = false;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -89,6 +99,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
     public String mImageFileLocation;
 
 
+
     public interface CameraEvent {
         public void PreviewFrameReady(byte[] data);
         public void PreviewFrameImage(Bitmap bitmap);
@@ -120,6 +131,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
         }
         //mCameraHandler = camerahandler;
 
+        CapturedPhotos = new ArrayList<>();
         AppSurfaceHolder = getHolder();
         AppSurfaceHolder.addCallback(this);
         AppSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -548,6 +560,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                 TakePhoto(mFrameBitmap);
 
 
+
                 mCameraEvent.PreviewFrameImage(mFrameBitmap);
 
                 // mYuvImage = new YuvImage(mFrameData, ImageFormat.NV21, PreviewWidth, PreviewHeight, null);
@@ -564,6 +577,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(createImageFileName().getAbsolutePath());
                 mFrameBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                 CapturedPhotos.add(mFrameBitmap);
                 fileOutputStream.flush();
                 fileOutputStream.close();
             } catch (Exception e) {
