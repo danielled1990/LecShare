@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.busywww.myliveevent.ImgurLogin.Authorization;
 import com.busywww.myliveevent.classes.AspectFrameLayout;
 import com.busywww.myliveevent.classes.MyCameraHelper;
 import com.busywww.myliveevent.classes.MyCameraPreview;
@@ -154,6 +155,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         setSupportActionBar(toolbar);
 
 
+        boolean loggedIn = Authorization.getInstance().isLoggedIn();
 
         mWebSocketsUtil.connectToWebSocketServer();
         mWebSocketsUtil.connectToImageWebSocketServer();

@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -44,6 +45,7 @@ import com.busywww.myliveevent.util.WebSocketsUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -52,13 +54,13 @@ import java.util.ArrayList;
 public class PdfView extends android.app.Fragment {
 
 
+
     public interface OnPdfPageChangedListener
     {
         public void onPageChanged(int page);
 
     }
 
-    //  private WebSocketUtil mWebSocketsUtil = new WebSocketUtil();
     private ImageView slideView;
     private int currentPage = 0;
     private Button next, previous;
@@ -68,6 +70,14 @@ public class PdfView extends android.app.Fragment {
     private static PdfRenderer renderer;
     private static String mPdfurl ="";
     OnPdfPageChangedListener onPdfPageChangeListener;
+    public ArrayList<Bitmap> pdfImagePages;
+
+  //  private Uri mImagePdfUri;
+    private String mImgurUrl;
+
+    private MyImgurUploadTask mImgurUploadTask;
+    //private int mImgurUploadStatus;
+    private Bitmap mBitmap;
 
 
     public void SetPathToPdf(String path)
@@ -85,10 +95,7 @@ public class PdfView extends android.app.Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // mWebSocketsUtil.connectToImageWebSocketServer();
-        // mWebSocketsUtil.attach(this);
-
+        pdfImagePages = new ArrayList<>();
         slideView = (ImageView)view.findViewById(R.id.imageSlide);
         startFileExplorer();
         next = (Button) view.findViewById(R.id.next);
@@ -105,8 +112,7 @@ public class PdfView extends android.app.Fragment {
                             currentPage++;
                             showImage();
                             onPdfPageChangeListener.onPageChanged(currentPage);
-                            //SendNextPage upload = new SendNextPage(currentPage,mWebSocketsUtil);
-                            //upload.execute();
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -130,51 +136,15 @@ public class PdfView extends android.app.Fragment {
                     currentPage--;
                     showImage();
                     onPdfPageChangeListener.onPageChanged(currentPage);
-                    // SendNextPage upload = new SendNextPage(currentPage,mWebSocketsUtil);
-                    // upload.execute();
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                // render();
-
             }
         });
 
-        // render();
     }
-   /* public void render() {
-        try {
-
-            int REQ_WIDTH = 1;
-            int REQ_HEIGHT = 1;
-            REQ_WIDTH = slideView.getWidth();
-            REQ_HEIGHT = slideView.getHeight();
-
-            Bitmap bitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_4444);
-
-            File file = new File(mSrcPath);//("/sdcard/Download/algorithms_summary.pdf");
-            PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY));
-
-            if (currentPage < 0) {
-                currentPage = 0;
-            } else if (currentPage > renderer.getPageCount()) {
-                currentPage = renderer.getPageCount() - 1;
-            }
-
-            Matrix m = slideView.getImageMatrix();
-            Rect rect = new Rect(0, 0, REQ_WIDTH, REQ_HEIGHT);
-            renderer.openPage(currentPage).render(bitmap, rect, m, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-            slideView.setImageMatrix(m);
-            slideView.setImageBitmap(bitmap);
-            slideView.invalidate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -188,7 +158,6 @@ public class PdfView extends android.app.Fragment {
         }
 
     }
-
 
     private void startFileExplorer(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -240,15 +209,19 @@ public class PdfView extends android.app.Fragment {
         REQ_WIDTH = slideView.getWidth();
         REQ_HEIGHT = slideView.getHeight();
 
-        Bitmap bitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_4444);
+        mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_4444);
+        new MyImgurUploadTask(mBitmap).execute();
+        Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
+
+        pdfImagePages.add(currentPage,mBitmap);
 
         Matrix m = slideView.getImageMatrix();
         Rect rect = new Rect(0, 0, REQ_WIDTH, REQ_HEIGHT);
         PdfRenderer.Page page = renderer.openPage(currentPage);
-        page.render(bitmap, rect, m, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+        page.render(mBitmap, rect, m, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
 
         slideView.setImageMatrix(m);
-        slideView.setImageBitmap(bitmap);
+        slideView.setImageBitmap(mBitmap);
         slideView.invalidate();
 
         page.close();
@@ -278,32 +251,61 @@ public class PdfView extends android.app.Fragment {
         pdfrender();
     }
 
+    private class MyImgurUploadTask extends ImgurUploadTask {
+        public MyImgurUploadTask(Bitmap bitmap) {
+            super(mBitmap, getActivity());
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (mImgurUploadTask != null) {
+                boolean cancelled = mImgurUploadTask.cancel(false);
+                if (!cancelled)
+                    this.cancel(true);
+            }
+            mImgurUploadTask = this;
+            mImgurUrl = null;
+            //getView().findViewById(R.id.choose_image_button).setEnabled(false);
+           // setImgurUploadStatus(R.string.choose_image_upload_status_uploading);
+        }
+        @Override
+        protected void onPostExecute(String imageId) {
+            super.onPostExecute(imageId);
+            mImgurUploadTask = null;
+            if (imageId != null) {
+                mImgurUrl = "http://imgur.com/" + imageId;
+               // setImgurUploadStatus(R.string.choose_image_upload_status_success);
+               // if (isResumed()) {
+                    //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
+                    //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
+             //   }
+            } else {
+                mImgurUrl = null;
+                Toast.makeText(getActivity(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
 
-//    private class SendNextPage extends AsyncTask<Void,Void,Void> {
-//        int page;
-//        WebSocketUtil websocket = new WebSocketUtil();
-//
-//        public SendNextPage(int page,WebSocketUtil websocket){
-//            this.page= page;
-//            this.websocket = websocket;
-//        }
-//
-//        public void SetPage(int ipage)
-//        {
-//            page = ipage;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            websocket.sendNextImagePage(page);
-//            return null;
-//        }
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            Toast.makeText(getActivity().getApplicationContext(),"Next Image Succeded! YaY",Toast.LENGTH_SHORT).show();
-//            String s ="indob";
-//            Log.d(s, "works");
+                //setImgurUploadStatus(R.string.choose_image_upload_status_failure);
+               /* if (isResumed()) {
+                    getView().findViewById(R.id.imgur_link_layout).setVisibility(View.GONE);
+                    if (isVisible()) {
+                        ((ImageView) getView().findViewById(R.id.choose_image_preview)).setImageBitmap(null);
+                        Toast.makeText(getActivity(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
+                    }
+                }*/
+            }
+
+        }
+    }
+
+//    private void setImgurUploadStatus(int stringResId) {
+//        mImgurUploadStatus = stringResId;
+//        if (getView() != null) {
+//            TextView status = (TextView) getView().findViewById(R.id.choose_image_upload_status);
+//            if (stringResId > 0) {
+//                status.setVisibility(View.VISIBLE);
+//                status.setText(stringResId);
+//            } else {
+//                status.setVisibility(View.GONE);
+//            }
 //        }
 //    }
 
