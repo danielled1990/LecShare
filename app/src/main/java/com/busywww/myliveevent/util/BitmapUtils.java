@@ -1,22 +1,12 @@
 package com.busywww.myliveevent.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-import com.busywww.myliveevent.LecShareContext;
-import com.busywww.myliveevent.R;
-import com.busywww.myliveevent.ImgurLogin.Authorization;
-import com.busywww.myliveevent.ImgurLogin.Login;
-import com.busywww.myliveevent.ImgurLogin.RefreshAccessTokenTask;
+
+import com.busywww.myliveevent.LecShare;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,7 +19,7 @@ public class BitmapUtils {
     public static Bitmap decodeSampledBitmapFromUri(Uri imageUri, int reqWidth, int reqHeight) {
         Log.d(TAG, "imageUri=" + imageUri);
 
-        Context context = LecShareContext.getAppContext();
+        Context context = LecShare.getAppContext();
 
         InputStream in;
         try {

@@ -14,8 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import com.busywww.myliveevent.AppStreaming;
 import com.busywww.myliveevent.LecShareContext;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -43,7 +41,7 @@ public class Authorization  {
         }
 
         public boolean isLoggedIn() {
-            Context context = AppStreaming.mContext;
+            Context context = LecShareContext.getAppContext();
             SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
             return !TextUtils.isEmpty(prefs.getString("access_token", null));
         }

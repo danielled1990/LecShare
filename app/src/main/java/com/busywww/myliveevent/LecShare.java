@@ -6,18 +6,18 @@ import android.content.Context;
 /**
  * Created by Alona on 8/22/2016.
  */
-public class LecShareContext extends Application {
+public class LecShare extends Application {
 
     private static Context context;
-    private static final String TAG = LecShareContext.class.getSimpleName();
+    private static final String TAG = LecShare.class.getSimpleName();
 
     public void onCreate(){
         super.onCreate();
-        LecShareContext.context = getApplicationContext();
+        LecShare.context = getApplicationContext();
     }
 
     public static Context getAppContext() {
-        return LecShareContext.context;
+        return LecShare.context;
     }
 
 }

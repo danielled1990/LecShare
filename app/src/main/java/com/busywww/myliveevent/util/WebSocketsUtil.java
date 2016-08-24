@@ -73,13 +73,9 @@ public class WebSocketsUtil {
                             notifyAllObservers(name);
                         }
                     }
-                //    if(type.)
+
 
                 }
-
-
-
-
 
 
                 });
