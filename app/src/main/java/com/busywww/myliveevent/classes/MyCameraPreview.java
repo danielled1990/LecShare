@@ -17,8 +17,10 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.busywww.myliveevent.AppStreaming;
+import com.busywww.myliveevent.LecShare;
 import com.busywww.myliveevent.util.AppShared;
 import com.busywww.myliveevent.util.Helper;
 import com.busywww.myliveevent.util.UtilGraphic;
@@ -556,14 +558,18 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                         PreviewDataInt, PreviewWidth,
                         PreviewHeight, Bitmap.Config.RGB_565); //ARGB_8888
 
-
-
-                Bitmap mBitmap =  Bitmap.createBitmap(
-                        PreviewDataInt, PreviewWidth,
-                        PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
-
-                 CapturedPhotos.add(mBitmap);
                 TakePhoto(mFrameBitmap);
+                if(mTakePhoto)
+                {
+                    Bitmap mBitmap =  Bitmap.createBitmap(
+                            PreviewDataInt, PreviewWidth,
+                            PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
+
+                    CapturedPhotos.add(mBitmap);
+                }
+
+
+
 
 
 
@@ -584,6 +590,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                 FileOutputStream fileOutputStream = new FileOutputStream(createImageFileName().getAbsolutePath());
                 mFrameBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                 //CapturedPhotos.add(mFrameBitmap);
+                 Toast.makeText(LecShare.getAppContext(),"TakenPhoto:", Toast.LENGTH_LONG).show();
                 fileOutputStream.flush();
                 fileOutputStream.close();
             } catch (Exception e) {
