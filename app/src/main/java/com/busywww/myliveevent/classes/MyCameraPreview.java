@@ -48,7 +48,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
 
     private String TAG = "MyCameraPreview";
     //private static MyImgurUploadTask mImgurUploadTask;
-    private static String mImageUrl;
+  //  private static String mImageUrl;
     public static Bitmap PhotoBitmap;
 
     public interface Events {
