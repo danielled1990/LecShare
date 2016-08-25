@@ -303,6 +303,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
                 if(photoTaken)
                 {
+
                     PdfView.this.CapturedImageURL.add(mImgurUrl);
 
                 }
