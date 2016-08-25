@@ -72,14 +72,14 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     private static String mPdfurl ="";
     OnPdfPageChangedListener onPdfPageChangeListener;
     public ArrayList<Bitmap> pdfImagePages;
-    public ArrayList<String> CapturedImageURL;
+   // public ArrayList<String> CapturedImageURL;
     private boolean photoTaken = false;
 
   //  private Uri mImagePdfUri;
     private String mImageUrl;
 
     private MyImgurUploadTask mImgurUploadTask;
-   // private String mCapturedImageURL;
+    private String mCapturedImageURL;
     private Bitmap mBitmap;
 
 
@@ -89,16 +89,13 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     }
 
     @Override
-    public void onCapturePhoto(ArrayList<Bitmap> capturedPhotos)
-    {    int i;
-        Bitmap photo;
+    public void onCapturePhoto(Bitmap capturedPhoto)
+    {
         photoTaken = true;
-
-        for (i =0 ;i<capturedPhotos.size();i++)
+        new MyImgurUploadTask(capturedPhoto).execute();
+        if(mCapturedImageURL != null)
         {
-          //  photo = capturedPhotos.get(i);
-           // new MyImgurUploadTask(photo).execute();
-
+            Toast.makeText(getActivity(), "Upload Photo Successfully! The Link :"+ mCapturedImageURL, Toast.LENGTH_LONG).show();
         }
         photoTaken = false;
     }
@@ -113,7 +110,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        CapturedImageURL = new ArrayList<>();
+        //CapturedImageURL = new ArrayList<>();
         pdfImagePages = new ArrayList<>();
         slideView = (ImageView)view.findViewById(R.id.imageSlide);
         startFileExplorer();
@@ -303,9 +300,14 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
+                    if(PdfView.this.photoTaken){
 
-
-                    PdfView.this.mImageUrl = mImgurUrl;
+                         PdfView.this.mCapturedImageURL = mImgurUrl;
+                    }
+                else
+                    {
+                        PdfView.this.mImageUrl = mImgurUrl;
+                    }
 
 
                // Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();

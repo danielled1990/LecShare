@@ -47,9 +47,9 @@ import static android.os.Environment.*;
 public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
     private String TAG = "MyCameraPreview";
-    private static MyImgurUploadTask mImgurUploadTask;
+    //private static MyImgurUploadTask mImgurUploadTask;
     private static String mImageUrl;
-    private static Bitmap mPhotoBitmap;
+    public static Bitmap PhotoBitmap;
 
     public interface Events {
         public void NewFrameImage(Bitmap bitmap);
@@ -57,13 +57,11 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
 
     public interface OnCapturePhotoListener
     {
-        public void onCapturePhoto(ArrayList<Bitmap> capturedPhotos);
+        public void onCapturePhoto(Bitmap capturedPhoto);
 
     }
 
-
     public OnCapturePhotoListener onCapturePhotoListener;
-    public static ArrayList<Bitmap> CapturedPhotos;
     public static boolean mTakePhoto = false;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -105,7 +103,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
     public static int EvOneStepCount = 0;
     public static ArrayList<String> EvList = null;
     public String mImageFileLocation;
-    public static ArrayList<String> CapturedImageURL = new ArrayList<>();
+
 
 
 
@@ -140,7 +138,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
         }
         //mCameraHandler = camerahandler;
 
-        CapturedPhotos = new ArrayList<>();
+
         AppSurfaceHolder = getHolder();
         AppSurfaceHolder.addCallback(this);
         AppSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -572,7 +570,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                             PreviewDataInt, PreviewWidth,
                             PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
 
-                    mPhotoBitmap = bitmap;
+                    PhotoBitmap = bitmap;
                 }
                 TakePhoto(mFrameBitmap);
 
@@ -600,29 +598,11 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                 e.printStackTrace();
             }
 
-          if( uploadTakenPhoto())
-          {
-              Toast.makeText(LecShare.getAppContext(), "Upload Taken Photo Successfully! The Link :"+ mImageUrl, Toast.LENGTH_LONG).show();
-          }
-            else
-          {
-              Toast.makeText(LecShare.getAppContext(), "Imgur Upload Taken Photo Error", Toast.LENGTH_LONG).show();
-          }
             mTakePhoto = false;
         }
     }
 
-    public static boolean uploadTakenPhoto()
-    {
 
-        new MyImgurUploadTask(mPhotoBitmap).execute();
-        if(CapturedImageURL.size() != 0)
-             return true;
-        else
-            return false;
-
-
-    }
 
 
     private static File createImageFileName()throws IOException {
@@ -780,41 +760,40 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
     private static Bitmap mFrameBitmap = null;
     private static YuvImage mYuvImage = null;
 
-    public static class MyImgurUploadTask extends ImgurUploadTask {
-        private String mImgurUrl;
-        public MyImgurUploadTask(Bitmap bitmap) {
-            super(bitmap, (Activity) LecShare.getAppContext());
-
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (mImgurUploadTask != null) {
-                boolean cancelled = mImgurUploadTask.cancel(false);
-                if (!cancelled)
-                    this.cancel(true);
-            }
-            mImgurUploadTask = this;
-            mImgurUrl = null;
-            //getView().findViewById(R.id.choose_image_button).setEnabled(false);
-            // setImgurUploadStatus(R.string.choose_image_upload_status_uploading);
-        }
-        @Override
-        protected void onPostExecute(String imageId) {
-            super.onPostExecute(imageId);
-            mImgurUploadTask = null;
-            if (imageId != null) {
-                 mImgurUrl = "http://imgur.com/" + imageId+".png";
-                MyCameraPreview.CapturedImageURL.add(mImgurUrl);
-
-                }
-
-             else
-            {
-                mImgurUrl = null;
-                Toast.makeText(LecShare.getAppContext(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
-            }
-
-        }
-    }
+//    public static class MyImgurUploadTask extends ImgurUploadTask {
+//        private String mImgurUrl;
+//        public MyImgurUploadTask(Bitmap bitmap) {
+//            super(bitmap, (Activity) LecShare.getAppContext());
+//
+//        }
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            if (mImgurUploadTask != null) {
+//                boolean cancelled = mImgurUploadTask.cancel(false);
+//                if (!cancelled)
+//                    this.cancel(true);
+//            }
+//            mImgurUploadTask = this;
+//            mImgurUrl = null;
+//            //getView().findViewById(R.id.choose_image_button).setEnabled(false);
+//            // setImgurUploadStatus(R.string.choose_image_upload_status_uploading);
+//        }
+//        @Override
+//        protected void onPostExecute(String imageId) {
+//            super.onPostExecute(imageId);
+//            mImgurUploadTask = null;
+//            if (imageId != null) {
+//                 mImgurUrl = "http://imgur.com/" + imageId+".png";
+//                  MyCameraPreview.CapturedImageURL.add(mImgurUrl);
+//                }
+//
+//             else
+//            {
+//                mImgurUrl = null;
+//                Toast.makeText(LecShare.getAppContext(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
+//            }
+//
+//        }
+//    }
 }

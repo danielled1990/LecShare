@@ -171,7 +171,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     public void TakePhoto(View view) {
         MyCameraPreview.mTakePhoto = true;
-       // boolean kaka = MyCameraPreview.uploadTakenPhoto();
+        pdfView.onCapturePhoto(AppPreview.PhotoBitmap);
     }
 
     @Override
