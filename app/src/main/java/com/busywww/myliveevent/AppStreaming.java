@@ -171,6 +171,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     public void TakePhoto(View view) {
         MyCameraPreview.mTakePhoto = true;
+       // boolean kaka = MyCameraPreview.uploadTakenPhoto();
     }
 
     @Override
@@ -344,7 +345,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         if(mWasStreamed){
 
 
-            pdfView.onCapturePhoto(AppPreview.CapturedPhotos);
+           // pdfView.onCapturePhoto(AppPreview.CapturedPhotos);
             UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",1);
             upload.execute();
         }
