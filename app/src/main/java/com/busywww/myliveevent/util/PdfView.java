@@ -303,16 +303,10 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
-                if(photoTaken)
-                {
 
-                    PdfView.this.CapturedImageURL.add(mImgurUrl);
 
-                }
-                else
-                {
                     PdfView.this.mImageUrl = mImgurUrl;
-                }
+
 
                // Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
              //   }

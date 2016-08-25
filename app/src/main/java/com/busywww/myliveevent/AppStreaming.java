@@ -345,7 +345,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         if(mWasStreamed){
 
 
-           // pdfView.onCapturePhoto(AppPreview.CapturedPhotos);
+       //  AppPreview.CapturedImageURL;
             UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",1);
             upload.execute();
         }
