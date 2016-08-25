@@ -614,12 +614,13 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
 
     public static boolean uploadTakenPhoto()
     {
+
         new MyImgurUploadTask(mPhotoBitmap).execute();
-        if(mImageUrl!=null) {
-            CapturedImageURL.add(mImageUrl);
-            return true;
-        }
-        return false;
+        if(CapturedImageURL.size() != 0)
+             return true;
+        else
+            return false;
+
 
     }
 
@@ -804,7 +805,8 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
             mImgurUploadTask = null;
             if (imageId != null) {
                  mImgurUrl = "http://imgur.com/" + imageId+".png";
-                 mImageUrl = mImgurUrl;
+                MyCameraPreview.CapturedImageURL.add(mImgurUrl);
+
                 }
 
              else
