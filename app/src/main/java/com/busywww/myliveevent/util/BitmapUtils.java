@@ -16,34 +16,34 @@ public class BitmapUtils {
 
     private static final String TAG = BitmapUtils.class.getSimpleName();
 
-    public static Bitmap decodeSampledBitmapFromUri(Uri imageUri, int reqWidth, int reqHeight) {
-        Log.d(TAG, "imageUri=" + imageUri);
-
-        Context context = LecShare.getAppContext();
-
-        InputStream in;
-        try {
-            in = context.getContentResolver().openInputStream(imageUri);
-        } catch (FileNotFoundException e) {
-            Log.w(TAG, "file not found", e);
-            return null;
-        }
+    public static Bitmap decodeSampledBitmapFromUri(InputStream in, int reqWidth, int reqHeight) {
+//        Log.d(TAG, "imageUri=" + imageUri);
+//
+//        Context context = LecShare.getAppContext();
+//
+//        InputStream in;
+//        try {
+//            in = context.getContentResolver().openInputStream(imageUri);
+//        } catch (FileNotFoundException e) {
+//            Log.w(TAG, "file not found", e);
+//            return null;
+//        }
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(in, null, options);
+       // BitmapFactory.decodeStream(in, null, options);
 
-        try {
-            in.close();
-        } catch (IOException e) {
-            Log.e(TAG, "error closing InputStream", e);
-        }
-        try {
-            in = context.getContentResolver().openInputStream(imageUri);
-        } catch (FileNotFoundException e) {
-            Log.w(TAG, "file not found", e);
-            return null;
-        }
+//        try {
+//            in.close();
+//        } catch (IOException e) {
+//            Log.e(TAG, "error closing InputStream", e);
+//        }
+//        try {
+//            in = context.getContentResolver().openInputStream(imageUri);
+//        } catch (FileNotFoundException e) {
+//            Log.w(TAG, "file not found", e);
+//            return null;
+//        }
 
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
         options.inJustDecodeBounds = false;

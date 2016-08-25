@@ -47,6 +47,7 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         imageIn = new ByteArrayInputStream(stream.toByteArray());
 
+
         //imageIn = mActivity.getContentResolver().openInputStream(mImageUri);
 
         HttpURLConnection conn = null;
