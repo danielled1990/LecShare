@@ -91,14 +91,16 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     @Override
     public void onCapturePhoto(ArrayList<Bitmap> capturedPhotos)
     {    int i;
+        Bitmap photo;
         photoTaken = true;
 
         for (i =0 ;i<capturedPhotos.size();i++)
         {
-            new MyImgurUploadTask(capturedPhotos.get(i)).execute();
+            photo = capturedPhotos.get(i);
+            new MyImgurUploadTask(photo).execute();
 
         }
-
+        photoTaken = false;
     }
 
 

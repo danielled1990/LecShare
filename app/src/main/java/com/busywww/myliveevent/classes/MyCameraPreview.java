@@ -558,7 +558,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                         PreviewDataInt, PreviewWidth,
                         PreviewHeight, Bitmap.Config.RGB_565); //ARGB_8888
 
-                TakePhoto(mFrameBitmap);
+
                 if(mTakePhoto)
                 {
                    Bitmap mBitmap = Bitmap.createBitmap(
@@ -566,6 +566,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                             PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
                     CapturedPhotos.add(mBitmap);
                 }
+                TakePhoto(mFrameBitmap);
 
                 mCameraEvent.PreviewFrameImage(mFrameBitmap);
 
