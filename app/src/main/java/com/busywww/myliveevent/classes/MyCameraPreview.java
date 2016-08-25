@@ -559,14 +559,9 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                         PreviewHeight, Bitmap.Config.RGB_565); //ARGB_8888
 
                 TakePhoto(mFrameBitmap);
-                if(mTakePhoto)
-                {
-//                    Bitmap mBitmap =  Bitmap.createBitmap(
-//                            PreviewDataInt, PreviewWidth,
-//                            PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
 
-                    CapturedPhotos.add(mFrameBitmap);
-                }
+
+
 
 
 
@@ -586,6 +581,7 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
 
     public static void TakePhoto(Bitmap mFrameBitmap) {
         if (mTakePhoto) {
+            CapturedPhotos.add(mFrameBitmap);
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(createImageFileName().getAbsolutePath());
                 mFrameBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
