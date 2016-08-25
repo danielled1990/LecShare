@@ -557,7 +557,12 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                         PreviewHeight, Bitmap.Config.RGB_565); //ARGB_8888
 
 
-                CapturedPhotos.add(mFrameBitmap);
+
+                Bitmap mBitmap =  Bitmap.createBitmap(
+                        PreviewDataInt, PreviewWidth,
+                        PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
+
+                 CapturedPhotos.add(mBitmap);
                 TakePhoto(mFrameBitmap);
 
 
