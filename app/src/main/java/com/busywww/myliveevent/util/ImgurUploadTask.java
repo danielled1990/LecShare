@@ -28,15 +28,18 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
     private static final String UPLOAD_URL = "https://api.imgur.com/3/image";
 
     private Activity mActivity;
-    private Uri mImageUri;  // local Uri to upload
+   // private Uri mImageUri;  // local Uri to upload
     private Bitmap mImageBitmap;
     private ByteArrayOutputStream stream;
+    private String[] mImgurUrl;
 
-    public ImgurUploadTask(Bitmap bitmap, Activity activity) { //Uri imageUri
+    public ImgurUploadTask(Bitmap bitmap, Activity activity,String[] mImgurUrl) { //Uri imageUri
       //  this.mImageUri = imageUri;
         mImageBitmap = bitmap;
 
         this.mActivity = activity;
+        this.mImgurUrl = mImgurUrl;
+
     }
 
     @Override
@@ -45,6 +48,9 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
 
         stream = new ByteArrayOutputStream();
         mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        mImageBitmap.getWidth();
+        Log.d("doInBackground",Integer.toString(mImageBitmap.getHeight()));
+
         imageIn = new ByteArrayInputStream(stream.toByteArray());
 
 
@@ -121,6 +127,8 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         String deletehash = root.getJSONObject("data").getString("deletehash");
 
         Log.i(TAG, "new imgur url: http://imgur.com/" + id + " (delete hash: " + deletehash + ")");
+        mImgurUrl[0] = "http://imgur.com/" + id ;
+
         return id;
     }
 }

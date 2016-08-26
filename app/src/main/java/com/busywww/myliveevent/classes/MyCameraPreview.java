@@ -573,7 +573,6 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                     PhotoBitmap = bitmap;
                 }
                 TakePhoto(mFrameBitmap);
-
                 mCameraEvent.PreviewFrameImage(mFrameBitmap);
 
                 // mYuvImage = new YuvImage(mFrameData, ImageFormat.NV21, PreviewWidth, PreviewHeight, null);

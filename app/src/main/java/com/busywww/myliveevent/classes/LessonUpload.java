@@ -19,7 +19,7 @@ import java.util.Date;
  */
 public class LessonUpload extends SqlConnection{
 
-    public static boolean uploadLesson(String videoId, ArrayList<PdfPlayer> pdfPlayerArray,String courseName,int lessonNum) throws SQLException {
+    public static boolean uploadLesson(String videoId, ArrayList<PdfPlayer> pdfPlayerArray,String courseName,int lessonNum,ArrayList<String> lessonPhotos) throws SQLException {
         try{
             Gson  gson = new Gson();
           //  JSONObject pdfPlayerJson = new JSONObject();
@@ -28,18 +28,25 @@ public class LessonUpload extends SqlConnection{
        //     SimpleDateFormat fmt =  new SimpleDateFormat("yyyy-MM-dd");
        //     String date = fmt.format(new Date());
         //    SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
+             String lessonPhotonjson = gson.toJson(lessonPhotos);
             Date dateObj = new Date();
             java.util.Date utilDate = new java.util.Date();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
           // java.sql.Date dateDB = new java.sql.Date(dateObj);
             PreparedStatement pre;
-            pre = dbConnection.prepareStatement("INSERT INTO Lesson (idLesson, lessonNum,date,course,videoId,pdfPlayer)  values (?,?,?,?,?,?)");
+            pre = dbConnection.prepareStatement("INSERT INTO Lesson (idLesson, lessonNum,date,course,videoId,pdfPlayer,lessonPhotos)  values (?,?,?,?,?,?,?)");
             pre.setString(1,null);
             pre.setInt(2, lessonNum);
             pre.setDate(3, sqlDate);
             pre.setString(4,courseName);
             pre.setString(5, videoId);
             pre.setString(6,res);
+            if(lessonPhotos!= null){
+                pre.setString(7,lessonPhotonjson);
+            }
+            else{
+                pre.setString(7,null);
+            }
             //   pre.setBinaryStream(4, fis, (int) picfile.length());
             int count = pre.executeUpdate();
             dbConnection.commit();

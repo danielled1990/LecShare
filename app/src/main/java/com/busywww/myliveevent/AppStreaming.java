@@ -1,6 +1,5 @@
 package com.busywww.myliveevent;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -25,7 +24,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -42,7 +40,6 @@ import android.widget.Toast;
 
 import com.busywww.myliveevent.ImgurLogin.Authorization;
 import com.busywww.myliveevent.classes.AspectFrameLayout;
-import com.busywww.myliveevent.classes.LessonUpload;
 import com.busywww.myliveevent.classes.MyCameraHelper;
 import com.busywww.myliveevent.classes.MyCameraPreview;
 import com.busywww.myliveevent.classes.UploadLessonToSql;
@@ -55,7 +52,6 @@ import com.busywww.myliveevent.util.Helper;
 import com.busywww.myliveevent.util.Observer;
 import com.busywww.myliveevent.util.PdfView;
 import com.busywww.myliveevent.util.UtilNetwork;
-import com.busywww.myliveevent.util.W_ImgFilePathUtil;
 import com.busywww.myliveevent.util.WebSocketsUtil;
 
 import com.google.android.gms.ads.AdListener;
@@ -179,6 +175,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         if(mIsStreaming)
         {
             pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
+      //      pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,link));
             SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
             upload.execute();
             Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
@@ -329,12 +326,14 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public void onResume() {
 
         super.onResume();
+        mChronometer.start();
     }
 
     @Override
     public void onPause() {
 
         super.onPause();
+        mChronometer.stop();
     }
 
     @Override
@@ -345,8 +344,8 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         if(mWasStreamed){
 
 
-       //  AppPreview.CapturedImageURL;
-            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",1);
+           // pdfView.onCapturePhoto(AppPreview.CapturedPhotos);
+            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",3,pdfView.CapturedImageURL);
             upload.execute();
         }
 
