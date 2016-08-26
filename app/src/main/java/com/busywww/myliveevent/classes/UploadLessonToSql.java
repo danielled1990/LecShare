@@ -3,6 +3,7 @@ package com.busywww.myliveevent.classes;
 import android.os.AsyncTask;
 
 import com.busywww.myliveevent.util.PdfPlayer;
+import com.busywww.myliveevent.util.pdfPlayerSingelton;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public class UploadLessonToSql extends AsyncTask<Void, Void, Void> {
     private String videoId;
-    private ArrayList<PdfPlayer> pdfPlayerArray;
+    private ArrayList<pdfPlayerSingelton> pdfPlayerArray;
     private String courseName;
     private int lessonNum;
     private ArrayList<String> lessonphotos;
@@ -26,7 +27,7 @@ public class UploadLessonToSql extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    public UploadLessonToSql(String videoId,ArrayList<PdfPlayer> pdfPlayerArray,String courseName,int lessonNum,ArrayList<String> lessonphotos) {
+    public UploadLessonToSql(String videoId, ArrayList<pdfPlayerSingelton> pdfPlayerArray, String courseName, int lessonNum, ArrayList<String> lessonphotos) {
         super();
         this.videoId=videoId;
         this.pdfPlayerArray = pdfPlayerArray;

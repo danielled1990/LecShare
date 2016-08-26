@@ -128,6 +128,10 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
 
         Log.i(TAG, "new imgur url: http://imgur.com/" + id + " (delete hash: " + deletehash + ")");
         mImgurUrl[0] = "http://imgur.com/" + id ;
+        pdfPlayerSingelton.getInstanceSingelton().addToLinks(mImgurUrl[0]);
+       /* int index = pdfPlayerSingelton.getInstanceSingelton().getIndex();
+        pdfPlayerSingelton.getInstanceSingelton().getArray().get(index).setImageLink(mImgurUrl[0]);
+        pdfPlayerSingelton.getInstanceSingelton().incIndex();*/
 
         return id;
     }

@@ -2,6 +2,7 @@ package com.busywww.myliveevent.classes;
 
 import com.busywww.myliveevent.util.PdfPlayer;
 import com.busywww.myliveevent.util.PdfView;
+import com.busywww.myliveevent.util.pdfPlayerSingelton;
 import com.google.gson.Gson;
 
 
@@ -19,12 +20,17 @@ import java.util.Date;
  */
 public class LessonUpload extends SqlConnection{
 
-    public static boolean uploadLesson(String videoId, ArrayList<PdfPlayer> pdfPlayerArray,String courseName,int lessonNum,ArrayList<String> lessonPhotos) throws SQLException {
+    public static boolean uploadLesson(String videoId, ArrayList<pdfPlayerSingelton> pdfPlayerArray, String courseName, int lessonNum, ArrayList<String> lessonPhotos) throws SQLException {
         try{
             Gson  gson = new Gson();
           //  JSONObject pdfPlayerJson = new JSONObject();
           //  jsonPut(pdfPlayerJson,"pdfPlayer",pdfPlayerArray);
-            String res = gson.toJson(pdfPlayerArray);
+            ArrayList<pdf1> pdfA =  new ArrayList<>();
+            for(int i=0;i<pdfPlayerSingelton.getInstanceSingelton().getArray().size();i++){
+                pdfPlayerSingelton.getInstanceSingelton().getArray().get(i).setImageLink(pdfPlayerSingelton.getInstanceSingelton().getLinks().get(i));
+            }
+            String res = gson.toJson(pdfPlayerSingelton.getInstanceSingelton().getArray());
+
        //     SimpleDateFormat fmt =  new SimpleDateFormat("yyyy-MM-dd");
        //     String date = fmt.format(new Date());
         //    SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
@@ -66,5 +72,12 @@ public class LessonUpload extends SqlConnection{
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static class pdf1{
+        public  int mHours;
+        public  int mMinutes;
+        public  int mSeconds;
+        public  int mPage;
+        public String link;
     }
 }

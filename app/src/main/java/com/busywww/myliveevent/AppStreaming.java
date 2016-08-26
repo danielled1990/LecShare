@@ -54,6 +54,7 @@ import com.busywww.myliveevent.util.PdfView;
 import com.busywww.myliveevent.util.UtilNetwork;
 import com.busywww.myliveevent.util.WebSocketsUtil;
 
+import com.busywww.myliveevent.util.pdfPlayerSingelton;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -172,15 +173,31 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     @Override
     public void onPageChanged(int page,String imageLink) {
+    //    while(imageLink.equals("")){}
+
+
+     //   pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
+   //     pdfPlayerSingelton.getInstance();
+    //    pdfPlayerSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
         if(mIsStreaming)
         {
-            pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
+            pdfPlayerSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
+         //   pdfPlayerSingelton.getInstance();
+         //   pdfPlayerSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
+       //     pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
       //      pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,link));
+
             SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
             upload.execute();
             Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
                     Toast.LENGTH_SHORT).show();
 
+        }
+        else{
+            pdfPlayerSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
+           // pdfPlayerSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
+            Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -275,8 +292,16 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
 
     public long getElapsedTime() {
-        long elapsedMillis = SystemClock.elapsedRealtime() - mChronometer.getBase();
-        return elapsedMillis;
+        if(mIsStreaming)
+        {
+            long elapsedMillis = SystemClock.elapsedRealtime() - mChronometer.getBase();
+            return elapsedMillis;
+        }
+        else
+        {
+            return 0;
+        }
+
     }
 
 
@@ -326,14 +351,14 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public void onResume() {
 
         super.onResume();
-        mChronometer.start();
+       // mChronometer.
     }
 
     @Override
     public void onPause() {
 
         super.onPause();
-        mChronometer.stop();
+   //     mChronometer.stop();
     }
 
     @Override
@@ -345,7 +370,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
 
            // pdfView.onCapturePhoto(AppPreview.CapturedPhotos);
-            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfTimePlayerList,"compexitiy",3,pdfView.CapturedImageURL);
+            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfPlayerSingelton.getInstanceSingelton().getArray(),"compexitiy",3,pdfView.CapturedImageURL);
             upload.execute();
         }
 
@@ -997,9 +1022,32 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                             @Override
                             public void run() {
                                 mStreamer.RestartStream();
-                                imageButtonStart.setImageResource(R.mipmap.ic_action_pause);
+                             /*   Thread thread = new Thread() {
+                                    @Override
+                                    public void run() {
+
+                                        synchronized (this) {
+
+
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mChronometer.setBase(SystemClock.elapsedRealtime());
+                                                    mChronometer.start();
+                                                }
+                                            });
+
+                                        }
+
+                                    }
+
+
+                                };*/
+                             //   thread.start();
                                 mChronometer.setBase(SystemClock.elapsedRealtime());
                                 mChronometer.start();
+                                imageButtonStart.setImageResource(R.mipmap.ic_action_pause);
+
                                 mWasStreamed = true;
                             }
                         });

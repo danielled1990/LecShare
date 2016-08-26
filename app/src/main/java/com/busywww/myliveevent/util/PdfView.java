@@ -36,6 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.busywww.myliveevent.AppStreaming;
+import com.busywww.myliveevent.LecShare;
 import com.busywww.myliveevent.R;
 import com.busywww.myliveevent.classes.MyCameraPreview;
 import com.busywww.myliveevent.util.PdfPlayer;
@@ -75,6 +77,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     public ArrayList<Bitmap> pdfImagePages;
     public ArrayList<String> CapturedImageURL;
     private boolean photoTaken = false;
+    private Activity activity;
 
   //  private Uri mImagePdfUri;
     private String[] mImageUrl = new String[1];
@@ -94,13 +97,13 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     public void onCapturePhoto(Bitmap capturedPhoto)
     {
         photoTaken = true;
-        try {
-            new MyImgurUploadTask(capturedPhoto,mImageUrl).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+      //  try {
+            new MyImgurUploadTask(capturedPhoto,mImageUrl).execute();
+      //  } catch (InterruptedException e) {
+      //      e.printStackTrace();
+      //  } catch (ExecutionException e) {
+      //      e.printStackTrace();
+      //  }
         if(mCapturedImageURL != null)
         {
             CapturedImageURL.add(mCapturedImageURL);
@@ -125,25 +128,50 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         slideView = (ImageView)view.findViewById(R.id.imageSlide);
         startFileExplorer();
         next = (Button) view.findViewById(R.id.next);
+        activity = AppStreaming.mActivity;
         next.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
 
                 if(renderer!=null){
-                    if(renderer.getPageCount()>currentPage){
+                    if(renderer.getPageCount()>currentPage) {
 
+
+              /*          new Thread(new Runnable() {
+                            public void run() {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        currentPage++;
+                                        try {
+                                            showImage();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        onPdfPageChangeListener.onPageChanged(currentPage, mImageUrl[0]);
+                                    }
+
+
+                                });
+                            }
+                        }).start();*/
+                        currentPage++;
                         try {
-
-                            currentPage++;
                             showImage();
-                            onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl[0]);
-
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        onPdfPageChangeListener.onPageChanged(currentPage, mImageUrl[0]);
+
+                        //   onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl[0]);
+
+
+                      /*  } catch (IOException e) {
+                            e.printStackTrace();
+                        }*/
                     }
+
                     else{
                         Toast.makeText(getActivity().getApplicationContext(),"please choose slide first",Toast.LENGTH_SHORT).show();
                     }
@@ -250,13 +278,13 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         Rect rect = new Rect(0, 0, REQ_WIDTH, REQ_HEIGHT);
         PdfRenderer.Page page = renderer.openPage(currentPage);
         page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT);
-        new MyImgurUploadTask(mBitmap,mImageUrl).execute().get();
+        new MyImgurUploadTask(mBitmap,mImageUrl).execute();
 
         slideView.setImageMatrix(m);
         slideView.setImageBitmap(mBitmap);
         slideView.invalidate();
-        if(mImageUrl!=null)
-            Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImageUrl[0], Toast.LENGTH_LONG).show();
+    //    if(mImageUrl!=null)
+    //        Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImageUrl[0], Toast.LENGTH_LONG).show();
         page.close();
 
     }
@@ -318,6 +346,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
             mImgurUploadTask = null;
             if (imageId != null) {
                 mImgurUrl[0] = "http://imgur.com/" + imageId+".png";
+
                // setImgurUploadStatus(R.string.choose_image_upload_status_success);
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
