@@ -43,7 +43,7 @@ import com.busywww.myliveevent.classes.AspectFrameLayout;
 import com.busywww.myliveevent.classes.MyCameraHelper;
 import com.busywww.myliveevent.classes.MyCameraPreview;
 import com.busywww.myliveevent.classes.UploadLessonToSql;
-import com.busywww.myliveevent.util.PdfPlayer;
+import com.busywww.myliveevent.util.pdfPlayerSingelton;
 import com.busywww.myliveevent.classes.YouTubeApi;
 import com.busywww.myliveevent.classes.YouTubeStreamer;
 import com.busywww.myliveevent.util.AdService;
@@ -83,7 +83,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     public static Chronometer mChronometer;
     private long timeWhenStopped = 0;
-    public ArrayList<PdfPlayer> pdfTimePlayerList;
+    public ArrayList<pdfPlayerSingelton> pdfTimePlayerList;
 
     private static final int ACTIVITY_START_APP = 0;
     private ImageView mPhotoCapturedImageView;
@@ -168,7 +168,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     public void TakePhoto(View view) {
         MyCameraPreview.mTakePhoto = true;
-        pdfView.onCapturePhoto(AppPreview.PhotoBitmap);
+
     }
 
     @Override
@@ -367,9 +367,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         super.onDestroy();
 
         if(mWasStreamed){
-
-
-           // pdfView.onCapturePhoto(AppPreview.CapturedPhotos);
             UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfPlayerSingelton.getInstanceSingelton().getArray(),"compexitiy",3,pdfView.CapturedImageURL);
             upload.execute();
         }
@@ -1295,9 +1292,9 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     private class SendNextPage extends AsyncTask<Void,Void,Void>{
         int page;
         WebSocketsUtil websocket = new WebSocketsUtil();
-        public SendNextPage(int page, WebSocketsUtil websocket){
+       public SendNextPage(int page, WebSocketsUtil websocket){
             this.page= page;
-            this.websocket = websocket;
+           this.websocket = websocket;
         }
 
         @Override

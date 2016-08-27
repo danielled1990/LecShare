@@ -29,7 +29,7 @@ public class LessonUpload extends SqlConnection{
             for(int i=0;i<pdfPlayerSingelton.getInstanceSingelton().getArray().size();i++){
                 pdfPlayerSingelton.getInstanceSingelton().getArray().get(i).setImageLink(pdfPlayerSingelton.getInstanceSingelton().getLinks().get(i));
             }
-            String res = gson.toJson(pdfPlayerSingelton.getInstanceSingelton().getArray());
+               String res = gson.toJson(pdfPlayerSingelton.getInstanceSingelton().getArray());
 
        //     SimpleDateFormat fmt =  new SimpleDateFormat("yyyy-MM-dd");
        //     String date = fmt.format(new Date());

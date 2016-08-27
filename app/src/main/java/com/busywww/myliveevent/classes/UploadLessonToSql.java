@@ -2,7 +2,7 @@ package com.busywww.myliveevent.classes;
 
 import android.os.AsyncTask;
 
-import com.busywww.myliveevent.util.PdfPlayer;
+import com.busywww.myliveevent.util.pdfPlayerSingelton;
 import com.busywww.myliveevent.util.pdfPlayerSingelton;
 
 import java.sql.SQLException;

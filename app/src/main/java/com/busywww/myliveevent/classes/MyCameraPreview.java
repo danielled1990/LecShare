@@ -26,6 +26,7 @@ import com.busywww.myliveevent.R;
 import com.busywww.myliveevent.util.AppShared;
 import com.busywww.myliveevent.util.Helper;
 import com.busywww.myliveevent.util.ImgurUploadTask;
+import com.busywww.myliveevent.util.PdfView;
 import com.busywww.myliveevent.util.UtilGraphic;
 import com.google.common.collect.ArrayTable;
 
@@ -570,9 +571,9 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
                             PreviewDataInt, PreviewWidth,
                             PreviewHeight, Bitmap.Config.ARGB_8888); //ARGB_8888
 
-                    PhotoBitmap = bitmap;
+                    TakePhoto(mFrameBitmap,bitmap);
                 }
-                TakePhoto(mFrameBitmap);
+
                 mCameraEvent.PreviewFrameImage(mFrameBitmap);
 
                 // mYuvImage = new YuvImage(mFrameData, ImageFormat.NV21, PreviewWidth, PreviewHeight, null);
@@ -584,8 +585,11 @@ public class MyCameraPreview extends SurfaceView implements SurfaceHolder.Callba
         }
     };
 
-    public static void TakePhoto(Bitmap mFrameBitmap) {
+    public static void TakePhoto(Bitmap mFrameBitmap,Bitmap photo) {
         if (mTakePhoto) {
+
+            PdfView pdf = new PdfView();
+            pdf.onCapturePhoto(photo);
 
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(createImageFileName().getAbsolutePath());

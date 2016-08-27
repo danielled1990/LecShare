@@ -40,7 +40,7 @@ import com.busywww.myliveevent.AppStreaming;
 import com.busywww.myliveevent.LecShare;
 import com.busywww.myliveevent.R;
 import com.busywww.myliveevent.classes.MyCameraPreview;
-import com.busywww.myliveevent.util.PdfPlayer;
+import com.busywww.myliveevent.util.pdfPlayerSingelton;
 import com.busywww.myliveevent.util.AppShared;
 import com.busywww.myliveevent.util.W_ImgFilePathUtil;
 import com.busywww.myliveevent.util.WebSocketsUtil;
@@ -75,7 +75,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     private static String mPdfurl ="";
     OnPdfPageChangedListener onPdfPageChangeListener;
     public ArrayList<Bitmap> pdfImagePages;
-    public ArrayList<String> CapturedImageURL;
+    public static ArrayList<String> CapturedImageURL = new ArrayList<String>();
     private boolean photoTaken = false;
     private Activity activity;
 
@@ -96,20 +96,27 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     @Override
     public void onCapturePhoto(Bitmap capturedPhoto)
     {
+        int size;
         photoTaken = true;
-      //  try {
-            new MyImgurUploadTask(capturedPhoto,mImageUrl).execute();
-      //  } catch (InterruptedException e) {
-      //      e.printStackTrace();
-      //  } catch (ExecutionException e) {
-      //      e.printStackTrace();
-      //  }
+        try {
+            MyImgurUploadTask uploadTask = new MyImgurUploadTask(capturedPhoto,mImageUrl);
+            String imageId = uploadTask.execute().get();
+            mCapturedImageURL = "http://imgur.com/" + imageId+".png";
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+       } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         if(mCapturedImageURL != null)
         {
             CapturedImageURL.add(mCapturedImageURL);
-            Toast.makeText(getActivity(), "Upload Photo Successfully! The Link :"+ mCapturedImageURL, Toast.LENGTH_LONG).show();
+           // size =  CapturedImageURL.size();
         }
         photoTaken = false;
+
+
     }
 
 
@@ -123,7 +130,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mImageUrl[0]="";
-        CapturedImageURL = new ArrayList<>();
+
         pdfImagePages = new ArrayList<>();
         slideView = (ImageView)view.findViewById(R.id.imageSlide);
         startFileExplorer();
@@ -136,7 +143,6 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
 
                 if(renderer!=null){
                     if(renderer.getPageCount()>currentPage) {
-
 
               /*          new Thread(new Runnable() {
                             public void run() {
@@ -163,13 +169,6 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                             e.printStackTrace();
                         }
                         onPdfPageChangeListener.onPageChanged(currentPage, mImageUrl[0]);
-
-                        //   onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl[0]);
-
-
-                      /*  } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
                     }
 
                     else{
@@ -351,14 +350,10 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                // if (isResumed()) {
                     //getView().findViewById(R.id.imgur_link_layout).setVisibility(View.VISIBLE);
                     //((TextView) getView().findViewById(R.id.link_url)).setText(mImgurUrl);
-                    if(PdfView.this.photoTaken){
-
-                         PdfView.this.mCapturedImageURL = mImgurUrl[0];
-                    }
-                else
-                    {
-                        PdfView.this.mImageUrl[0] = mImgurUrl[0];
-                    }
+                if(!PdfView.this.photoTaken)
+                {
+                    PdfView.this.mImageUrl[0] = mImgurUrl[0];
+                }
 
 
                // Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImgurUrl, Toast.LENGTH_LONG).show();
