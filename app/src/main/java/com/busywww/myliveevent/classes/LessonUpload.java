@@ -55,7 +55,7 @@ public class LessonUpload extends SqlConnection{
             }
             //   pre.setBinaryStream(4, fis, (int) picfile.length());
             int count = pre.executeUpdate();
-            dbConnection.commit();
+           // dbConnection.commit();
         }
         catch(SQLException ex){
             if(dbConnection != null){
