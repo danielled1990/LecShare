@@ -127,8 +127,15 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         String deletehash = root.getJSONObject("data").getString("deletehash");
 
         Log.i(TAG, "new imgur url: http://imgur.com/" + id + " (delete hash: " + deletehash + ")");
-        mImgurUrl[0] = "http://imgur.com/" + id+".png" ;
-        pdfPlayerSingelton.getInstanceSingelton().addToLinks(mImgurUrl[0]);
+        mImgurUrl[0] = "http://imgur.com/" + id+".png";
+        if(pdfPlayerSingelton.getInstanceSingelton().getIsPdf()){
+            pdfPlayerSingelton.getInstanceSingelton().addToLinks(mImgurUrl[0]);
+            pdfPlayerSingelton.getInstanceSingelton().setIsPdf(false);
+        }
+        else{
+            pdfPlayerSingelton.getInstanceSingelton().addToImageLink(mImgurUrl[0]);
+        }
+
        /* int index = pdfPlayerSingelton.getInstanceSingelton().getIndex();
         pdfPlayerSingelton.getInstanceSingelton().getArray().get(index).setImageLink(mImgurUrl[0]);
         pdfPlayerSingelton.getInstanceSingelton().incIndex();*/

@@ -16,6 +16,8 @@ public class pdfPlayerSingelton {
     private  String  mImageUrl = "";
     private ArrayList<String> links =  new ArrayList<>();
     private static pdfPlayerSingelton instanceSingelton = null;
+    private boolean isPdf = false;
+    private ArrayList<String> imageLink = new ArrayList<>();
    /* public PdfPlayer(long timeElapsed, int page, String imageLink)
     {
 
@@ -49,6 +51,12 @@ public class pdfPlayerSingelton {
             array = new ArrayList<>();
         }
         return array;
+    }
+    public void addToImageLink(String add){
+        imageLink.add(add);
+    }
+    public ArrayList<String>  getImageinks() {
+        return imageLink;
     }
     public void addToLinks(String add) {
         links.add(add);
@@ -89,4 +97,11 @@ public class pdfPlayerSingelton {
     public ArrayList<String>  getLinks() {
         return links;
     }
+    public void setIsPdf(boolean is){
+        isPdf = is;
+    }
+    public boolean getIsPdf(){
+        return isPdf;
+    }
+
 }

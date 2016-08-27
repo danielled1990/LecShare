@@ -22,6 +22,7 @@ public class LessonUpload extends SqlConnection{
 
     public static boolean uploadLesson(String videoId, ArrayList<pdfPlayerSingelton> pdfPlayerArray, String courseName, int lessonNum, ArrayList<String> lessonPhotos) throws SQLException {
         try{
+            dbConnection.setAutoCommit(false);
             Gson  gson = new Gson();
           //  JSONObject pdfPlayerJson = new JSONObject();
           //  jsonPut(pdfPlayerJson,"pdfPlayer",pdfPlayerArray);
@@ -34,7 +35,7 @@ public class LessonUpload extends SqlConnection{
        //     SimpleDateFormat fmt =  new SimpleDateFormat("yyyy-MM-dd");
        //     String date = fmt.format(new Date());
         //    SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
-             String lessonPhotonjson = gson.toJson(lessonPhotos);
+             String lessonPhotonjson = gson.toJson(pdfPlayerSingelton.getInstanceSingelton().getImageinks());
             Date dateObj = new Date();
             java.util.Date utilDate = new java.util.Date();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -55,7 +56,7 @@ public class LessonUpload extends SqlConnection{
             }
             //   pre.setBinaryStream(4, fis, (int) picfile.length());
             int count = pre.executeUpdate();
-           // dbConnection.commit();
+            dbConnection.commit();
         }
         catch(SQLException ex){
             if(dbConnection != null){

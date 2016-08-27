@@ -98,16 +98,11 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     {
         int size;
         photoTaken = true;
-        try {
-            MyImgurUploadTask uploadTask = new MyImgurUploadTask(capturedPhoto,mImageUrl);
-            String imageId = uploadTask.execute().get();
-            mCapturedImageURL = "http://imgur.com/" + imageId+".png";
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-       } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+            MyImgurUploadTask uploadTask = new MyImgurUploadTask(capturedPhoto,mImageUrl);
+            uploadTask.execute();
+            //mCapturedImageURL = "http://imgur.com/" + imageId+".png";
+
 
         if(mCapturedImageURL != null)
         {
@@ -168,6 +163,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        pdfPlayerSingelton.getInstanceSingelton().setIsPdf(true);
                         onPdfPageChangeListener.onPageChanged(currentPage, mImageUrl[0]);
                     }
 
@@ -188,6 +184,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
 
                     currentPage--;
                     showImage();
+                    pdfPlayerSingelton.getInstanceSingelton().setIsPdf(true);
                     onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl[0]);
 
                 } catch (IOException e) {
@@ -248,6 +245,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
             try {
                 renderer = new PdfRenderer(getSeekableFileDescriptor());
                 showImage();
+                pdfPlayerSingelton.getInstanceSingelton().setIsPdf(true);
                 onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl[0]);
             } catch (IOException e) {
                 e.printStackTrace();
