@@ -103,5 +103,11 @@ public class pdfPlayerSingelton {
     public boolean getIsPdf(){
         return isPdf;
     }
+    public void cleararrays(){
+        array.clear();
+        links.clear();
+        imageLink.clear();
+
+    }
 
 }

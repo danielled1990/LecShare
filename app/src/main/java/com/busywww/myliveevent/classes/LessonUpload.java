@@ -56,6 +56,7 @@ public class LessonUpload extends SqlConnection{
             }
             //   pre.setBinaryStream(4, fis, (int) picfile.length());
             int count = pre.executeUpdate();
+            pdfPlayerSingelton.getInstanceSingelton().cleararrays();
             dbConnection.commit();
         }
         catch(SQLException ex){
