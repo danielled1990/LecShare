@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Enter your semester schedule"
-        android:id="@+id/title1"
+        android:id="@+id/courseText"
         android:layout_marginTop="44dp"
         android:textSize="25sp"
         android:textColor="#494242"
@@ -32,7 +32,7 @@
         android:id="@+id/course_spinner"
         android:layout_marginTop="44dp"
         android:background="@android:drawable/btn_dropdown"
-        android:layout_below="@+id/title1"
+        android:layout_below="@+id/courseText"
         android:layout_alignLeft="@+id/to_hour_spinner"
         android:layout_alignStart="@+id/to_hour_spinner"
         android:layout_toLeftOf="@+id/day_spinner"
@@ -44,8 +44,8 @@
         android:id="@+id/day_spinner"
         android:background="@android:drawable/btn_dropdown"
         android:layout_alignTop="@+id/course_spinner"
-        android:layout_alignRight="@+id/title1"
-        android:layout_alignEnd="@+id/title1"
+        android:layout_alignRight="@+id/courseText"
+        android:layout_alignEnd="@+id/courseText"
         android:layout_marginRight="24dp"
         android:layout_marginEnd="24dp" />
 
@@ -67,8 +67,8 @@
         android:id="@+id/to_hour_spinner"
         android:background="@android:drawable/btn_dropdown"
         android:layout_alignTop="@+id/from_hour_spinner"
-        android:layout_alignLeft="@+id/title1"
-        android:layout_alignStart="@+id/title1" />
+        android:layout_alignLeft="@+id/courseText"
+        android:layout_alignStart="@+id/courseText" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -79,6 +79,6 @@
         android:singleLine="false"
         android:background="#7dd74c"
         android:layout_alignTop="@+id/from_hour_spinner"
-        android:layout_alignRight="@+id/title1"
-        android:layout_alignEnd="@+id/title1" />
+        android:layout_alignRight="@+id/courseText"
+        android:layout_alignEnd="@+id/courseText" />
 </RelativeLayout>

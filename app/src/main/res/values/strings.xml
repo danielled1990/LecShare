@@ -8,6 +8,9 @@
     <string name="str_linkforapps"><u>Try other FREE Apps Play Store.</u></string>
     <string name="banner_ad_unit_id">ca-app-pub-0882328384926881/2151316093</string>
     <string name="fullscreen_ad_unit_id">ca-app-pub-0882328384926881/6581515690</string>
+    <string name="Send">Send</string>
+    <string name="add_your_courses">Add Your Courses</string>
+
 
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>

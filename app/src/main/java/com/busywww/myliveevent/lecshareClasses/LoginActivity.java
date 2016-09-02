@@ -11,7 +11,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.busywww.myliveevent.LecShareDB.User;
+import com.busywww.myliveevent.LecShareDB.UserInfoSingelton;
 import com.busywww.myliveevent.R;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by coral on 21/08/2016.
@@ -20,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     Button signupBtn , loginBtn;
     AlertDialog.Builder builder;
     EditText email, password;
+    UserInfoSingelton userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +67,30 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    String output = "";
                     BackgroundTask backgroundTask = new BackgroundTask(LoginActivity.this);
-                    backgroundTask.execute("login", email.getText().toString(), password.getText().toString());
+                    try {
+                        output =  backgroundTask.execute("login", email.getText().toString(), password.getText().toString()).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    if(output.equals("success"))
+                    {
+                        String code = "Login true";
+                        String message = "Hello " + UserInfoSingelton.getInstance().getUserName() ;
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        intent.putExtra("message",message);
+                        LoginActivity.this.startActivity(intent);
+                    }
+
                 }
             }
         });
     }
+
+
 }

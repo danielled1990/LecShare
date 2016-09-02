@@ -72,35 +72,35 @@ public class Helper {
         }
     }
 
-    public static void ActionShareLiveEvent(Context context, YouTubeEventData eventData) {
-        try {
-//            File shareFile = new File(AppShared.SelectedFilePath);
-//            Uri uri = Uri.fromFile(shareFile);
-//            //String mime = Util.GetFileMimeType(mContext, uri);
-//            String mime = Util.GetFileMimeType2(uri.toString());
+//    public static void ActionShareLiveEvent(Context context, YouTubeEventData eventData) {
+//        try {
+////            File shareFile = new File(AppShared.SelectedFilePath);
+////            Uri uri = Uri.fromFile(shareFile);
+////            //String mime = Util.GetFileMimeType(mContext, uri);
+////            String mime = Util.GetFileMimeType2(uri.toString());
+////            Intent intent = new Intent(Intent.ACTION_SEND);
+////            intent.putExtra(Intent.EXTRA_SUBJECT, "Share Live Event");
+////            intent.putExtra(Intent.EXTRA_STREAM, uri);
+////            if (mime != null && mime.length() > 0) {
+////                intent.setType(mime);
+////                context.startActivity(Intent.createChooser(intent, "Share"));
+////            }
+//
+//            String eventUri = eventData.GetWatchUri();
+//
+//            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("txt");
 //            Intent intent = new Intent(Intent.ACTION_SEND);
-//            intent.putExtra(Intent.EXTRA_SUBJECT, "Share Live Event");
-//            intent.putExtra(Intent.EXTRA_STREAM, uri);
-//            if (mime != null && mime.length() > 0) {
-//                intent.setType(mime);
-//                context.startActivity(Intent.createChooser(intent, "Share"));
-//            }
-
-            String eventUri = eventData.GetWatchUri();
-
-            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("txt");
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Live Event Share");
-            intent.putExtra(Intent.EXTRA_TEXT, eventUri);
-            intent.setType(mimeType);
-
-            context.startActivity(Intent.createChooser(intent, "Send Live Event Link"));
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//            intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Live Event Share");
+//            intent.putExtra(Intent.EXTRA_TEXT, eventUri);
+//            intent.setType(mimeType);
+//
+//            context.startActivity(Intent.createChooser(intent, "Send Live Event Link"));
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 

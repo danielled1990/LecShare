@@ -4,7 +4,6 @@ package com.busywww.myliveevent.util;
 import com.busywww.myliveevent.ImgurLogin.Authorization;
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,7 +12,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,19 +24,19 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
     private static final String TAG = ImgurUploadTask.class.getSimpleName();
     private int i;
     private static final String UPLOAD_URL = "https://api.imgur.com/3/image";
-
+    private boolean isPhoto;
     private Activity mActivity;
-   // private Uri mImageUri;  // local Uri to upload
     private Bitmap mImageBitmap;
     private ByteArrayOutputStream stream;
     private String[] mImgurUrl;
 
-    public ImgurUploadTask(Bitmap bitmap, Activity activity,String[] mImgurUrl) { //Uri imageUri
+    public ImgurUploadTask(Bitmap bitmap, Activity activity,String[] mImgurUrl,boolean  isPhoto) {
       //  this.mImageUri = imageUri;
         mImageBitmap = bitmap;
 
         this.mActivity = activity;
         this.mImgurUrl = mImgurUrl;
+        this.isPhoto = isPhoto;
 
     }
 
@@ -52,8 +50,6 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         Log.d("doInBackground",Integer.toString(mImageBitmap.getHeight()));
 
         imageIn = new ByteArrayInputStream(stream.toByteArray());
-
-
         //imageIn = mActivity.getContentResolver().openInputStream(mImageUri);
 
         HttpURLConnection conn = null;
@@ -128,17 +124,20 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
 
         Log.i(TAG, "new imgur url: http://imgur.com/" + id + " (delete hash: " + deletehash + ")");
         mImgurUrl[0] = "http://imgur.com/" + id+".png";
-        if(pdfPlayerSingelton.getInstanceSingelton().getIsPdf()){
-            pdfPlayerSingelton.getInstanceSingelton().addToLinks(mImgurUrl[0]);
-            pdfPlayerSingelton.getInstanceSingelton().setIsPdf(false);
+        if(isPhoto)  {
+
+        //   if( LessonSingelton.getInstanceSingelton().getIsPdf()){
+            LessonSingelton.getInstanceSingelton().addToImageLink(mImgurUrl[0]);
+            //LessonSingelton.getInstanceSingelton().setIsPdf(false);
         }
         else{
-            pdfPlayerSingelton.getInstanceSingelton().addToImageLink(mImgurUrl[0]);
+
+            LessonSingelton.getInstanceSingelton().addToPdfImageLinks(mImgurUrl[0]);
         }
 
-       /* int index = pdfPlayerSingelton.getInstanceSingelton().getIndex();
-        pdfPlayerSingelton.getInstanceSingelton().getArray().get(index).setImageLink(mImgurUrl[0]);
-        pdfPlayerSingelton.getInstanceSingelton().incIndex();*/
+       /* int index = LessonSingelton.getInstanceSingelton().getIndex();
+        LessonSingelton.getInstanceSingelton().getArray().get(index).setImageLink(mImgurUrl[0]);
+        LessonSingelton.getInstanceSingelton().incIndex();*/
 
         return id;
     }

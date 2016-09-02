@@ -12,30 +12,41 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.busywww.myliveevent.AppSplash;
+import com.busywww.myliveevent.LecShareDB.Course;
+import com.busywww.myliveevent.LecShareDB.UserInfoSingelton;
 import com.busywww.myliveevent.R;
+import com.busywww.myliveevent.util.CustomOnItemSelectedListener;
+import com.busywww.myliveevent.util.LessonSingelton;
+
+import java.util.ArrayList;
 
 /**
  * Created by coral on 21/08/2016.
  */
 public class MainActivity extends AppCompatActivity {
+    ArrayList<String> coursesNames;
+    public static Course ChosenCourse;
+
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Spinner courseSpinner;
-    ArrayAdapter<CharSequence> adapterCourse;
+   // ArrayAdapter<CharSequence> adapterCourse;
     TextView textViewWelcome;
     NavigationView navigationView;
     FragmentTransaction fragmentTransaction;
     AlertDialog.Builder builder;
-    Button button_join;
+    Button button_join_live;
+    Button button_watch_record;
+    ImageButton button_start_new;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -49,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         //actionBarDrawerToggle.syncState();
-        button_join = (Button) findViewById(R.id.button_join);
+
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.main_container, new HomeFragment());
         fragmentTransaction.commit();
@@ -86,20 +97,42 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        courseSpinner = (Spinner) findViewById(R.id.choose_course_spinner);
-        adapterCourse = ArrayAdapter.createFromResource(this, R.array.courses, android.R.layout.simple_spinner_item);
-        adapterCourse.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        courseSpinner.setAdapter(adapterCourse);
-
+         addItemsOnCoursesSpinner(UserInfoSingelton.getInstance().getUserCourses());
+         addListenerOnSpinnerCourseSelection();
+         button_watch_record = (Button) findViewById(R.id.button_watch);
+         button_watch_record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setChosenCourse();
+               // startActivity(new Intent(MainActivity.this,AppSplash.class));
+            }
+        });
+//        button_start_new = (ImageButton) findViewById(R.id.add_button);
+//        button_start_new.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setChosenCourse();
+//                //startActivity(new Intent(MainActivity.this,AppSplash.class));
+//            }
+//        });
         textViewWelcome = (TextView) findViewById(R.id.welcome_user);
         String message = getIntent().getStringExtra("message");
         textViewWelcome.setText(message);
-        button_join.setOnClickListener(new View.OnClickListener() {
+        button_join_live = (Button) findViewById(R.id.button_join);
+        button_join_live.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setChosenCourse();
                 startActivity(new Intent(MainActivity.this,AppSplash.class));
             }
         });
+    }
+
+    private void setChosenCourse()
+    {
+        int pos =courseSpinner.getSelectedItemPosition();
+        ChosenCourse = UserInfoSingelton.getInstance().getUserCourses().get(pos);
+        LessonSingelton.getInstanceSingelton().setLessonCourse(ChosenCourse);
     }
 
     @Override
@@ -110,13 +143,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void showAlertWatchRecord(View view) {
 
+        setChosenCourse();//**************
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
         myAlert.setTitle("Live Streaming Now!");
         myAlert.setIcon(R.drawable.stream_black);
         myAlert.setMessage("Live streaming is happening now. Would you like to join?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) { // בחרנו כן ולכן נרצה לפתוח למשתמש את אתר האינטרנט דרך הדפדפן
-                // נרצה לפתוח לו את הלינק המדוייק לשיעור זה
+            public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(MainActivity.this,LoginActivity.class));
             }
         });
@@ -132,4 +165,26 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this,AppSplash.class);
         startActivity(intent);
     }
+
+    private void addListenerOnSpinnerCourseSelection() {
+        courseSpinner = (Spinner) findViewById(R.id.choose_course_spinner);
+        ArrayAdapter<String> adapter_course = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, coursesNames);
+        adapter_course.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        courseSpinner.setAdapter(adapter_course);
+        courseSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+
+    }
+
+    private void addItemsOnCoursesSpinner(ArrayList<Course> courses) {
+        coursesNames = new ArrayList<>();
+
+        for(int i=0;i<courses.size();i++)
+        {
+            coursesNames.add(courses.get(i).getCourseName());
+        }
+
+
+    }
+
 }

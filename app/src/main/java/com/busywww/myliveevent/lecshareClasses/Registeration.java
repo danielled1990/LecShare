@@ -12,7 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.busywww.myliveevent.LecShare;
+import com.busywww.myliveevent.LecShareDB.UploadUserToSql;
+import com.busywww.myliveevent.LecShareDB.User;
+import com.busywww.myliveevent.LecShareDB.UserInfoSingelton;
 import com.busywww.myliveevent.R;
+import com.mysql.jdbc.PreparedStatement;
 
 /**
  * Created by coral on 21/08/2016.
@@ -84,13 +89,16 @@ public class Registeration extends Activity {
                 }
                 else //data provided by user is ok!
                 {
-                    BackgroundTask backgroundTask = new BackgroundTask(Registeration.this);
-                    backgroundTask.execute("register",name.getText().toString(),email.getText().toString(),pass.getText().toString(), school);
+
+                     BackgroundTask backgroundTask = new BackgroundTask(Registeration.this);
+                     backgroundTask.execute("register",name.getText().toString(),email.getText().toString(),pass.getText().toString(), school);
                 }
             }
         });
 
     }
+
+//saves userInfo in singelton and to db
 
     public void insertSchedule(View view) {
         Intent intent = new Intent(Registeration.this,InsertSchedule.class);

@@ -42,19 +42,19 @@ import com.busywww.myliveevent.ImgurLogin.Authorization;
 import com.busywww.myliveevent.classes.AspectFrameLayout;
 import com.busywww.myliveevent.classes.MyCameraHelper;
 import com.busywww.myliveevent.classes.MyCameraPreview;
-import com.busywww.myliveevent.classes.UploadLessonToSql;
-import com.busywww.myliveevent.util.pdfPlayerSingelton;
+import com.busywww.myliveevent.LecShareDB.UploadLessonToSql;
+import com.busywww.myliveevent.util.LessonSingelton;
 import com.busywww.myliveevent.classes.YouTubeApi;
 import com.busywww.myliveevent.classes.YouTubeStreamer;
 import com.busywww.myliveevent.util.AdService;
 import com.busywww.myliveevent.util.AppShared;
 import com.busywww.myliveevent.util.Helper;
 import com.busywww.myliveevent.util.Observer;
+import com.busywww.myliveevent.util.PdfPlayer;
 import com.busywww.myliveevent.util.PdfView;
 import com.busywww.myliveevent.util.UtilNetwork;
 import com.busywww.myliveevent.util.WebSocketsUtil;
 
-import com.busywww.myliveevent.util.pdfPlayerSingelton;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -74,16 +74,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-
-
-
 public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPageChangedListener , Observer {
 
 
     public static Chronometer mChronometer;
     private long timeWhenStopped = 0;
-    public ArrayList<pdfPlayerSingelton> pdfTimePlayerList;
+    public ArrayList<LessonSingelton> pdfTimePlayerList;
 
     private static final int ACTIVITY_START_APP = 0;
     private ImageView mPhotoCapturedImageView;
@@ -112,7 +108,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     private static FloatingActionButton fab;
     private static FrameLayout layoutCameraView;
     private static AspectFrameLayout cameraViewAfl;
-    private static TextView textViewTitle;
+   // private static TextView textViewTitle;
     private static ImageView imageViewSwitchCamera;
     private static ImageButton imageButtonStart;
     private static ImageView imageViewFlash;
@@ -173,29 +169,20 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     @Override
     public void onPageChanged(int page,String imageLink) {
-    //    while(imageLink.equals("")){}
 
-
-     //   pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
-   //     pdfPlayerSingelton.getInstance();
-    //    pdfPlayerSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
         if(mIsStreaming)
         {
-            pdfPlayerSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
-         //   pdfPlayerSingelton.getInstance();
-         //   pdfPlayerSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
-       //     pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,imageLink));
-      //      pdfTimePlayerList.add(new PdfPlayer(getElapsedTime(),page,link));
+            LessonSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
 
-            SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
-            upload.execute();
+           // SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
+          //  upload.execute();
             Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
                     Toast.LENGTH_SHORT).show();
 
         }
         else{
-            pdfPlayerSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
-           // pdfPlayerSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
+            LessonSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
+           // LessonSingelton.SetHoursMinutesSeconds(getElapsedTime(),page);
             Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
                     Toast.LENGTH_SHORT).show();
         }
@@ -207,13 +194,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
-            fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    HandleShareEvent();
-                }
-            });
 
             mChronometer = (Chronometer)findViewById(R.id.chronometer) ;
             cameraViewAfl = (AspectFrameLayout) findViewById(R.id.cameraView_afl);
@@ -275,9 +255,9 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                     HandleFlashChange();
                 }
             });
-            if (AppShared.SelectedEvent != null) {
-                textViewTitle.setText(AppShared.SelectedEvent.GetTitle());
-            }
+//            if (AppShared.SelectedEvent != null) {
+//                textViewTitle.setText(AppShared.SelectedEvent.GetTitle());
+//            }
             imageButtonStart.bringToFront();
             initCamera();
 
@@ -365,9 +345,10 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public void onDestroy() {
 
         super.onDestroy();
+        String courseName = LessonSingelton.getInstanceSingelton().getLessonCourse().getCourseName();
 
         if(mWasStreamed){
-            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),pdfPlayerSingelton.getInstanceSingelton().getArray(),"compexitiy",3,pdfView.CapturedImageURL);
+            UploadLessonToSql upload = new UploadLessonToSql(AppShared.SelectedEvent.GetId(),courseName);
             upload.execute();
         }
 
@@ -376,7 +357,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     @Override
     public void finish() {
         try {
-
 
             synchronized (LOCK) {
                 if (mWakeLock != null) {
@@ -849,13 +829,13 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         }
     }
 
-    private static void HandleShareEvent() {
-        try {
-            Helper.ActionShareLiveEvent(mContext, AppShared.SelectedEvent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void HandleShareEvent() {
+//        try {
+//            Helper.ActionShareLiveEvent(mContext, AppShared.SelectedEvent);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private static boolean mIsStreaming = false;
     private static boolean mUseBackup = false;

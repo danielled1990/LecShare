@@ -1,4 +1,4 @@
-package com.busywww.myliveevent.classes;
+package com.busywww.myliveevent.LecShareDB;
 
 
 
@@ -15,13 +15,12 @@ public abstract class SqlConnection {
 
     public static Connection dbConnection = null;
     public static String s = "";
-    public static String kaki = "jdbc:mysql://192.168.1.15:3306/LecSharere?autoReconnect=true&relaxAutoCommit=true";
     public static void init(){}
 
     static {
         try{
             Class.forName(SQL_DRIVER).newInstance();
-            dbConnection = DriverManager.getConnection("jdbc:mysql://192.168.1.15:3306/LecShare","root","DAnielle136"); //setAutoCommit (false);
+            dbConnection = DriverManager.getConnection("jdbc:mysql://192.168.43.234:3306/LecShare","root","25121989");
             //        dbConnection = DriverManager.getConnection(SERVER_URL);
             s="ok";
 

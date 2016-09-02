@@ -14,28 +14,51 @@ public class PdfPlayer {
     private int mSeconds;
     private int mHours;
     private int mPage;
-    private String mImageUrl;
+   // private String mImageUrl = null;
+     private String mPdfUrl;
 
 
-    public PdfPlayer()
+    public PdfPlayer(int Hours,int Minutes,int Seconds,int Page)
     {
-        mMinutes = 0;
-        mSeconds = 0;
-        mHours = 0;
-        mPage = 0;
+        mMinutes = Minutes;
+        mSeconds = Seconds;
+        mHours = Hours;
+        mPage = Page;
+      //  mPdfUrl = PdfUrl;
 
     }
 
 
-    public PdfPlayer(long timeElapsed,int page,String imageLink)
+    public PdfPlayer(long timeElapsed,int page)
     {
 
         mHours = (int) (timeElapsed / 3600000);
         mMinutes = (int) (timeElapsed - mHours * 3600000) / 60000;
         mSeconds = (int) (timeElapsed - mHours * 3600000 - mMinutes * 60000) / 1000;
         mPage = page;
-        mImageUrl = imageLink;
+      //  mImageUrl = imageLink;
+     //   mPdfUrl = pdfUrl;
 
+    }
+
+//    public void setImageURL(String imageUrl)
+//    {
+//       // mImageUrl = imageUrl;
+//    }
+//
+//    public String getImageUrl ()
+//    {
+//       // return mImageUrl;
+//    }
+
+    public void setPdfURL(String pdfUrl)
+    {
+        mPdfUrl = pdfUrl;
+    }
+
+    public String getPdfUrl ()
+    {
+        return mPdfUrl;
     }
 
     // Expects a string in the form MM:SS or HH:MM:SS

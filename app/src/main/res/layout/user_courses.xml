@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:weightSum="1"
+    android:background="#dfc7ed">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save and Start"
+        android:id="@+id/save_start"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Choose Your Courses :"
+        android:id="@+id/courseText"
+        android:layout_marginTop="44dp"
+        android:textSize="25sp"
+        android:textColor="#494242"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="190dp"
+        android:layout_height="48dp"
+        android:id="@+id/course_spinner"
+        android:background="@android:drawable/btn_dropdown"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/to_hour_spinner"
+        android:layout_alignStart="@+id/to_hour_spinner" />
+    <Spinner
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:id="@+id/semester_spinner"
+        android:background="@android:drawable/btn_dropdown"
+        android:layout_below="@+id/semester" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Choose Semester:"
+        android:id="@+id/semester"
+        android:layout_marginTop="54dp"
+        android:layout_below="@+id/courseText"
+        android:layout_alignLeft="@+id/to_hour_spinner"
+        android:layout_alignStart="@+id/to_hour_spinner" />
+
+    <!--<Button-->
+        <!--style="?android:attr/buttonStyleSmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="ADD"-->
+        <!--android:id="@+id/button"-->
+        <!--android:singleLine="false"-->
+        <!--android:background="#7dd74c"-->
+        <!--android:layout_below="@+id/semester"-->
+        <!--android:layout_toRightOf="@+id/course_spinner"-->
+        <!--android:layout_toEndOf="@+id/course_spinner"-->
+        <!--android:layout_marginLeft="29dp"-->
+        <!--android:layout_marginStart="29dp" />-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Select Courses:"
+        android:id="@+id/textView"
+        android:layout_above="@+id/course_spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add to My Courses"
+        android:id="@+id/buttonAddCorces"
+        android:singleLine="false"
+        android:background="#7dd74c"
+        android:layout_gravity="right"
+        android:layout_alignTop="@+id/course_spinner"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/table_layout"
+        android:layout_above="@+id/save_start"
+        android:layout_below="@+id/course_spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+
+        <TableRow
+            android:background="#607D8B"
+            android:padding="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Course Name" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Semester" />
+
+        </TableRow>
+
+
+    </TableLayout>
+
+
+</RelativeLayout>

@@ -436,9 +436,9 @@ public class AppSplash extends AppCompatActivity implements
         deleteEvent(event);
     }
 
-    @Override
-    public void onEventShareClicked(YouTubeEventData event) {
-        Helper.ActionShareLiveEvent(mContext, event);
+   @Override
+   public void onEventShareClicked(YouTubeEventData event) {
+     // Helper.ActionShareLiveEvent(mContext, event);
     }
 
     @Override

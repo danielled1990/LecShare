@@ -82,7 +82,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".lecshareClasses.Registeration" />
-        <activity android:name=".lecshareClasses.InsertSchedule" />
+        <activity android:name=".lecshareClasses.UserCourses" />
         <activity android:name=".lecshareClasses.InsertSchedule2" />
         <activity android:name=".lecshareClasses.MainActivity" android:theme="@style/AppTheme.NoActionBar" />
 
