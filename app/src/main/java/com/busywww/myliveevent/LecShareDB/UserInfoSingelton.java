@@ -17,10 +17,14 @@ public class UserInfoSingelton {
 
     private ArrayList<Course> mCourses;
     private ArrayList<Course> mUserCourses;
+    private ArrayList<Course> mUpdateCourses;
+    private ArrayList<Course> mDeleteCourses;
 
     private UserInfoSingelton(){
         mCourses = new ArrayList<>();
         mUserCourses = new ArrayList<>();
+        mUpdateCourses = new ArrayList<>();
+        mDeleteCourses = new ArrayList<>();
     }
 
     public static UserInfoSingelton getInstance(){
@@ -91,6 +95,60 @@ public class UserInfoSingelton {
     public void setUserID(int id)
     {
         mUserID = id;
+    }
+
+
+    public void setCoursesToDelete(ArrayList<Course> deleteCourses)
+    {
+        mDeleteCourses = deleteCourses;
+    }
+
+    public ArrayList<Course> getCoursesToDelete()
+    {
+        return mDeleteCourses;
+    }
+
+    public void setNewCourses(ArrayList<Course> courses)
+    {
+        mUpdateCourses = courses;
+    }
+
+    public ArrayList<Course> getCoursesToUpdate()
+    {
+        return mUpdateCourses;
+    }
+
+    public void AddNewCourses()
+    {
+        int i;
+        for(i = 0 ;i< mUpdateCourses.size();i++)
+        {
+            mUserCourses.add(mUpdateCourses.get(i));
+        }
+        mUpdateCourses.clear();
+
+    }
+
+    public void DeleteCourses()
+    {
+        int i;
+        for(i = 0 ;i< mDeleteCourses.size();i++)
+        {
+            mUserCourses.remove(mDeleteCourses.get(i));
+        }
+
+        mUpdateCourses.clear();
+
+    }
+
+    public void AddCourseToUpdate(Course course)
+    {
+        mUpdateCourses.add(course);
+    }
+
+    public void AddCourseToDelete(Course course)
+    {
+        mDeleteCourses.add(course);
     }
 
 

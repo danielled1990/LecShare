@@ -770,7 +770,8 @@ public class AppSplash extends AppCompatActivity implements
             final RadioButton radioButtonPublic = (RadioButton) window.findViewById(R.id.radioButtonPublic);
 
             final String status = eventData.GetPrivacyStatus();
-            newPrivacy = status;
+           // newPrivacy = status;
+            newPrivacy = "unlisted";
             if (status.equals("unlisted")) {
                 radioGroup.check(radioButtonUnlisted.getId());
             } else if (status.equals("private")) {

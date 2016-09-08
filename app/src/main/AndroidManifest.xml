@@ -63,6 +63,8 @@
             android:screenOrientation="landscape"></activity>
         <!--android:screenOrientation="portrait"-->
 
+        <activity android:name=".lecshareClasses.LecShareWeb"
+            ></activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
@@ -83,7 +85,7 @@
         </activity>
         <activity android:name=".lecshareClasses.Registeration" />
         <activity android:name=".lecshareClasses.UserCourses" />
-        <activity android:name=".lecshareClasses.InsertSchedule2" />
+        <activity android:name=".lecshareClasses.EditUserCourses" />
         <activity android:name=".lecshareClasses.MainActivity" android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

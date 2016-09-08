@@ -5,10 +5,15 @@ package com.busywww.myliveevent.util;
  */
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,16 +21,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
 import com.busywww.myliveevent.AppStreaming;
+import com.busywww.myliveevent.LecShare;
 import com.busywww.myliveevent.R;
 import com.busywww.myliveevent.classes.MyCameraPreview;
 
@@ -41,16 +49,16 @@ import java.util.concurrent.ExecutionException;
 public class PdfView extends android.app.Fragment implements MyCameraPreview.OnCapturePhotoListener {
 
 
-
     public interface OnPdfPageChangedListener
     {
-        public void onPageChanged(int page,String mImageUrl);
+        public boolean onPageChanged(int page);
+        public void startStream();
 
     }
 
     private ImageView slideView;
     private int currentPage = 0;
-    private Button next, previous;
+    private ImageButton next, previous;
     private String mSrcPath;
 
     private static final int FILE_SELECT_CODE =32 ;
@@ -58,24 +66,37 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
     private static String mPdfurl ="";
     OnPdfPageChangedListener onPdfPageChangeListener;
     public ArrayList<Bitmap> pdfImagePages;
-    private boolean photoTaken = false;
+    public static boolean photoTaken = false;
     private Activity activity;
-    private String[] mImageUrl = new String[1];
+   public String[] mImageUrl = new String[1];
     private MyImgurUploadTask mImgurUploadTask;
     private Bitmap mBitmap;
+    int[] PreviewDataInt =null;
 
+    public int getCurrentPage()
+    {
+        return currentPage;
+    }
+
+
+
+    public void loadPicInsteadOfPDF()
+    {
+       Bitmap picBitmap = BitmapFactory.decodeResource(LecShare.getAppContext().getResources(), R.drawable.learn);
+        MyImgurUploadTask uploadTask = new MyImgurUploadTask(picBitmap,mImageUrl);
+        uploadTask.execute();
+    }
 
 
 
     @Override
     public void onCapturePhoto(Bitmap capturedPhoto)
     {
-        int size;
         photoTaken = true;
 
-            MyImgurUploadTask uploadTask = new MyImgurUploadTask(capturedPhoto,mImageUrl,photoTaken);
+            MyImgurUploadTask uploadTask = new MyImgurUploadTask(capturedPhoto,mImageUrl);
             uploadTask.execute();
-            photoTaken = false;
+
 
     }
 
@@ -94,8 +115,9 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         pdfImagePages = new ArrayList<>();
         slideView = (ImageView)view.findViewById(R.id.imageSlide);
 
+        PreviewDataInt = new int[slideView.getWidth() * slideView.getHeight()];
 
-        next = (Button) view.findViewById(R.id.next);
+        next = (ImageButton) view.findViewById(R.id.next);
         activity = AppStreaming.mActivity;
         next.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -115,18 +137,18 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                                         currentPage++;
                                         try {
 
-                                            LessonSingelton.getInstanceSingelton().setIsPdf(true);
                                             showImage();
-                                            onPdfPageChangeListener.onPageChanged(currentPage, mImageUrl[0]);
+
+                                          onPdfPageChangeListener.onPageChanged(currentPage);
+
+
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                     }
                                 });
                                }
-
                                 else
-
                                 {
                                     Toast.makeText(getActivity().getApplicationContext(), "please choose slide first", Toast.LENGTH_SHORT).show();
                                 }
@@ -135,25 +157,36 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
                     }
                 }).start();
 
-
             }
             });
 
-        previous = (Button) view.findViewById(R.id.previous);
+        previous = (ImageButton) view.findViewById(R.id.previous);
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  LessonSingelton.getInstanceSingelton().setIsPdf(true);
-                try {
+
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
                     currentPage--;
-                   LessonSingelton.getInstanceSingelton().setIsPdf(true);
-                    showImage();
-                    onPdfPageChangeListener.onPageChanged(currentPage,mImageUrl[0]);
+                    getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            showImage();
+                                                        }catch (IOException e)
+                                                        {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+                    onPdfPageChangeListener.onPageChanged(currentPage);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    }
+
+                }).start();
 
             }
         });
@@ -174,32 +207,41 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         }
     }
 
-    private void startFileExplorer(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        //intent.setType("*/*");      //all files
-        intent.setType("application/pdf");   //PDF file only
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        if(renderer!=null){
-            closeRenderer();
-        }
+    public void startFileExplorer(){
 
-        try {
-            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"),FILE_SELECT_CODE );
-            intent.toUri(32);
-        } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(getActivity(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                //intent.setType("*/*");      //all files
+                intent.setType("application/pdf");   //PDF file only
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                if (renderer != null) {
+                    closeRenderer();
+                }
+
+                try {
+                    startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), FILE_SELECT_CODE);
+                    intent.toUri(32);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    // Potentially direct the user to the Market with a Dialog
+                    Toast.makeText(getActivity(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
 
 
         if (requestCode == AppShared.REQUEST_GMS_ERROR_DIALOG) {
         }
         if (requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK) {
+
 
 
             Uri content_describer = data.getData();
@@ -213,69 +255,98 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
 
             new Thread(new Runnable() {
                 public void run() {
-                      try {
-                          renderer = new PdfRenderer(getSeekableFileDescriptor());
-                      }catch (IOException e){e.printStackTrace();}
 
-                    //LessonSingelton.getInstanceSingelton().setIsPdf(true);
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                       @Override
+                       public void run() {
                             try {
+                                try {
+                                    renderer = new PdfRenderer(getSeekableFileDescriptor());
+                                }catch (IOException e){e.printStackTrace();}
+
+                                LessonSingelton.getInstanceSingelton().setPdfOn();
                                 showImage();
-                                onPdfPageChangeListener.onPageChanged(currentPage, mImageUrl[0]);
+                                onPdfPageChangeListener.onPageChanged(currentPage);
+
                             }
                             catch( IOException e)
                             {
                                 e.printStackTrace();
                             }
+
                         }
 
-//
-                    });
-                    //   File destination = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Test/TestTest/" + filename);
-                    //   Log.d("Destination is ", destination.toString());
+                   });
 
-                    // });
-                    // }
-                }
+                     }
+
 
             }).start();
+
+//            if(!AppStreaming.mIsStreaming)
+//            {
+//                showAlertStartStreaming();
+//
+//            }
+
         }
     }
 
-    //}
+
+    public void showAlertStartStreaming()
+    {
+        AlertDialog.Builder myAlert = new AlertDialog.Builder(activity);
+        myAlert.setMessage("You must now start streaming...").setPositiveButton("Start", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                onPdfPageChangeListener.startStream();
+
+            }
+        });
+        myAlert.setNegativeButton("Finish", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                activity.finish();
+
+            }
+        });
+        myAlert.show();
+
+    }
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void pdfrender() throws IOException, ExecutionException, InterruptedException {
 
-        int REQ_WIDTH = 1;
-        int REQ_HEIGHT = 1;
-        REQ_WIDTH = slideView.getWidth();
-        REQ_HEIGHT = slideView.getHeight();
+//        int REQ_WIDTH = 1;
+//        int REQ_HEIGHT = 1;
+//        REQ_WIDTH = slideView.getWidth();
+//        REQ_HEIGHT = slideView.getHeight();
+//
+//
+//        mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_8888);
+//        Log.d("pdfview",Integer.toString(REQ_HEIGHT));
+//        Matrix m = slideView.getImageMatrix();
+//        Rect rect = new Rect(0, 0, REQ_WIDTH, REQ_HEIGHT);
+//        PdfRenderer.Page page = renderer.openPage(currentPage);
+//        page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+//       slideView.setImageMatrix(m);
+//        slideView.setImageBitmap(mBitmap);
+//        slideView.invalidate();
+//        page.close();
+//
+//       Bitmap bitmap = mBitmap;//Bitmap.createBitmap(400,400,Bitmap.Config.ARGB_8888);
+//
+//        MyImgurUploadTask uploadTask =  new MyImgurUploadTask(bitmap,mImageUrl);
+//        uploadTask.execute();
 
-        mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_8888);
-        Log.d("pdfview",Integer.toString(REQ_HEIGHT));
-       // new MyImgurUploadTask(mBitmap).execute();
-        pdfImagePages.add(currentPage,mBitmap);
 
-        Matrix m = slideView.getImageMatrix();
-        //Rect rect = new Rect(0, 0, REQ_WIDTH, REQ_HEIGHT);
-        PdfRenderer.Page page = renderer.openPage(currentPage);
-        page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT);
-        new MyImgurUploadTask(mBitmap,mImageUrl,false).execute();
-
-
-
-        slideView.setImageMatrix(m);
-        slideView.setImageBitmap(mBitmap);
-        slideView.invalidate();
-    //    if(mImageUrl!=null)
-    //        Toast.makeText(getActivity(), "Upload Successfully! The Link :"+ mImageUrl[0], Toast.LENGTH_LONG).show();
-        page.close();
-
-       //new MyImgurUploadTask(mBitmap,mImageUrl,false).execute();
+        MyPdfUploadTask pdfTask =  new MyPdfUploadTask(slideView.getHeight(),slideView.getWidth());
+        pdfTask.execute();
 
     }
+
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void closeRenderer(){
         renderer.close();
@@ -296,6 +367,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         }
         return fd;
     }
+
     private void showImage() throws IOException {
         try {
 
@@ -308,14 +380,73 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         }
     }
 
+
+    public class MyPdfUploadTask extends AsyncTask<Void,Void,Void>
+    {
+        Bitmap mBitmap;
+        int REQ_WIDTH = 1;
+        int REQ_HEIGHT = 1;
+        Matrix m ;
+        PdfRenderer.Page page = null;
+        MyImgurUploadTask uploadTask;
+
+        public MyPdfUploadTask(int height,int width)
+        {
+            REQ_HEIGHT = height;
+            REQ_WIDTH = width;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_8888);
+//        if(!AppStreaming.mIsStreaming)
+//        {
+//            showAlertStartStreaming();
+//        }
+
+        }
+
+        @Override
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            PdfView.this.slideView.setImageMatrix(m);
+            PdfView.this.slideView.setImageBitmap(mBitmap);
+            PdfView.this.slideView.invalidate();
+            page.close();
+
+            uploadTask.execute();
+
+        }
+
+
+        @Override
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        protected Void doInBackground(Void... params)
+        {
+
+            Log.d("pdfview",Integer.toString(REQ_HEIGHT));
+            page = renderer.openPage(currentPage);
+            page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+            uploadTask = new MyImgurUploadTask(mBitmap,PdfView.this.mImageUrl);
+
+            return null;
+        }
+
+    }
+
+
     public class MyImgurUploadTask extends ImgurUploadTask {
         private String[] mImgurUrl;
 
+        public MyImgurUploadTask(Bitmap bitmap,String[] mImgurUrl) {
 
-        public MyImgurUploadTask(Bitmap bitmap,String[] mImgurUrl,boolean isPhoto) {
-
-           super(bitmap, getActivity(),mImgurUrl,isPhoto);
+           super(bitmap, getActivity(),mImgurUrl);
             this.mImgurUrl = mImgurUrl;
+
 
         }
         @Override
@@ -328,28 +459,27 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
             }
             mImgurUploadTask = this;
 
+
         }
         @Override
         protected void onPostExecute(String imageId) {
             super.onPostExecute(imageId);
             mImgurUploadTask = null;
             if (imageId != null) {
-                mImgurUrl[0] = "http://imgur.com/" + imageId+".png";
+                mImgurUrl[0] = "http://imgur.com/" + imageId+".jpg";
 
-//                if( LessonSingelton.getInstanceSingelton().getIsPdf()){
-//
-//                    LessonSingelton.getInstanceSingelton().addToImageLink(mImgurUrl[0]);
-//                    LessonSingelton.getInstanceSingelton().setIsPdf(false);
-//                }
-//                else{
-//
-//                    LessonSingelton.getInstanceSingelton().addToPdfImageLinks(mImgurUrl[0]);
-//                }
+
             } else {
                 mImgurUrl = null;
                         Toast.makeText(getActivity(), R.string.imgur_upload_error, Toast.LENGTH_LONG).show();
 
             }
+
+//            if(!AppStreaming.mIsStreaming)
+//            {
+//                showAlertStartStreaming();
+//
+//            }
 
         }
     }

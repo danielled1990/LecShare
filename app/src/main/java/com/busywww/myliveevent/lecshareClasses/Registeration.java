@@ -100,8 +100,5 @@ public class Registeration extends Activity {
 
 //saves userInfo in singelton and to db
 
-    public void insertSchedule(View view) {
-        Intent intent = new Intent(Registeration.this,InsertSchedule.class);
-        startActivity(intent);
-    }
+
 }

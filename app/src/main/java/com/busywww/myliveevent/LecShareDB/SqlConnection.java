@@ -20,7 +20,7 @@ public abstract class SqlConnection {
     static {
         try{
             Class.forName(SQL_DRIVER).newInstance();
-            dbConnection = DriverManager.getConnection("jdbc:mysql://192.168.1.15:3306/LecShare","root","DAnielle136");
+            dbConnection = DriverManager.getConnection("jdbc:mysql://lechsharetest.cvu9lx1ig8hh.us-west-2.rds.amazonaws.com:3306/lecShare1","DAC140916","DAC140916");
             //        dbConnection = DriverManager.getConnection(SERVER_URL);
             s="ok";
 

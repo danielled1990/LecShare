@@ -2,6 +2,8 @@ package com.busywww.myliveevent.LecShareDB;
 
 import android.os.AsyncTask;
 
+import com.busywww.myliveevent.util.Constants;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -10,9 +12,7 @@ import java.util.ArrayList;
  */
 public class UploadCourseToSql extends AsyncTask<Void, Void, ArrayList<Course>> {
 
-    private static final int SET_COURSES = 1;
-    private static final int GET_COURSES = 0;
-    private static final int SET_COURSER_USER = 2;
+
     private String mSchool;
     ArrayList<Course> courses = new ArrayList<>();
 
@@ -21,7 +21,7 @@ public class UploadCourseToSql extends AsyncTask<Void, Void, ArrayList<Course>> 
     @Override
     protected ArrayList<Course> doInBackground(Void... params) {
         switch (mDoAction) {
-            case GET_COURSES:
+            case Constants.GET_COURSES:
                 try {
                     courses = CourseUpdate.getAllCourses(mSchool);
                 } catch (ClassNotFoundException e) {
@@ -31,11 +31,17 @@ public class UploadCourseToSql extends AsyncTask<Void, Void, ArrayList<Course>> 
                 }
                 break;
 
-            case SET_COURSES:
+            case Constants.SET_COURSES:
                 CourseUpdate.setCourses(UserInfoSingelton.getInstance().getCourses());
                 break;
-            case SET_COURSER_USER:
-                CourseUpdate.setUserCourses();
+            case Constants.SET_COURSER_USER:
+                CourseUpdate.setUserCourses(Constants.REGISTER_COURSES);
+                break;
+            case Constants.UPDATE_COURSES:
+                CourseUpdate.setUserCourses(Constants.UPDATE_COURSES);
+                break;
+            case Constants.DELETE_USER_COURSES:
+                CourseUpdate.DeleteUserCourses();
                 break;
 
         }

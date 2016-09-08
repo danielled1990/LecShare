@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/deck_background"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Edit My Courses"
+        android:textColor="#F580E1"
+        android:id="@+id/courseText"
+        android:layout_marginTop="44dp"
+        android:textSize="40sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/add_to_my_courses"
+        android:id="@+id/textView3"
+        android:textColor="#f180ff"
+        android:layout_alignBottom="@+id/spinnerAdd"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="71dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerAdd"
+        android:background="#94EB2B"
+        android:layout_below="@+id/courseText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="109dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/delete_from_my_courses"
+        android:textColor="#f180ff"
+        android:id="@+id/textView4"
+        android:layout_above="@+id/spinnerDelete"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerDelete"
+        android:background="#94EB2B"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="120dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/buttonAdd"
+        android:background="#FFCE33"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/buttonDelete"
+        android:background="#FFCE33"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/imageButtonBack"
+        android:layout_alignRight="@+id/buttonAdd"
+        android:layout_alignEnd="@+id/buttonAdd" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonBack"
+        android:src="@mipmap/prev_buttn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/courseText"
+        android:layout_alignStart="@+id/courseText" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonSave"
+        android:src="@mipmap/save_buttn"
+        android:layout_alignBottom="@+id/buttonDelete"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/buttonDelete" />
+
+
+</RelativeLayout>

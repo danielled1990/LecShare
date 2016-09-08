@@ -10,6 +10,9 @@
     <string name="fullscreen_ad_unit_id">ca-app-pub-0882328384926881/6581515690</string>
     <string name="Send">Send</string>
     <string name="add_your_courses">Add Your Courses</string>
+    <string name="delete_from_my_courses">Choose Course to Delete: </string>
+    <string name="add_to_my_courses">Choose Course to Add: </string>
+    <string name="start_new_live_lesson">Start New Live Lesson</string>
 
 
     <string name="drawer_open">drawer open</string>

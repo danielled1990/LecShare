@@ -16,7 +16,7 @@
     <com.busywww.myliveevent.classes.AspectFrameLayout
         android:id="@+id/cameraView_afl"
         android:layout_width="352dp"
-        android:layout_height="313dp"
+        android:layout_height="343dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
@@ -41,20 +41,21 @@
             android:background="@color/bw00"
             android:layout_gravity="center">
 
+
         </FrameLayout>
 
-        <ImageView
-            android:layout_width="@dimen/width_48"
-            android:layout_height="@dimen/width_48"
-            android:id="@+id/imageViewSwitchCamera"
-            android:layout_gravity="top|left"
-            android:layout_margin="@dimen/width_8"
-            android:src="@drawable/ic_action_switch_video"
-            android:background="@drawable/btn_circle_padding_src_2"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginLeft="@dimen/width_4"
-            android:scaleType="center" />
+        <!--<ImageView-->
+            <!--android:layout_width="@dimen/width_48"-->
+            <!--android:layout_height="@dimen/width_48"-->
+            <!--android:id="@+id/imageViewSwitchCamera"-->
+            <!--android:layout_gravity="top|left"-->
+            <!--android:layout_margin="@dimen/width_8"-->
+            <!--android:src="@drawable/ic_action_switch_video"-->
+            <!--android:background="@drawable/btn_circle_padding_src_2"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--android:layout_marginLeft="@dimen/width_4"-->
+            <!--android:scaleType="center" />-->
 
         <ImageView
             android:layout_width="@dimen/width_48"
@@ -70,50 +71,13 @@
             android:scaleType="center" />
 
         <Chronometer
-            android:layout_width="49dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
             android:id="@+id/chronometer"
             android:textColor="#ff0000"
             android:gravity="left"
             android:textSize="16sp"
-            android:layout_gravity="right|bottom" />
-
-
-    </com.busywww.myliveevent.classes.AspectFrameLayout>
-
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:padding="@dimen/width_16"
-        android:id="@+id/layoutContents"
-        android:background="@color/bw40"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:id="@+id/pdfContainer"
-            android:orientation="vertical"
-            android:background="@android:color/holo_blue_light"
-            android:layout_gravity="center_horizontal|top"
-
-            >
-
-        </LinearLayout>
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-        <!--android:text="Live Event Title"-->
-        <!--android:id="@+id/textViewTitle"-->
-        <!--android:textColor="@color/bwee"-->
-        <!--android:layout_gravity="right|bottom" />-->
-
-
-
+            android:layout_gravity="left|top" />
 
         <ImageButton
             android:id="@+id/imageButtonStart"
@@ -132,6 +96,13 @@
             android:padding="53dp" />
 
         <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src= "@mipmap/stop_bttn"
+            android:id="@+id/imageButton"
+            android:layout_gravity="bottom|left" />
+
+        <ImageButton
             android:layout_width="50dp"
             android:layout_height="43dp"
             android:src="@mipmap/ic_capture_buttn"
@@ -140,16 +111,37 @@
             android:clickable="true"
             android:id="@+id/imageCaptureButton"
             android:onClick="TakePhoto"
-            android:layout_gravity="left|bottom" />
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_pdf_buttn"
-            android:text="getPdf"
-            android:id="@+id/buttonPdf"
             android:layout_gravity="right|bottom" />
 
+
+    </com.busywww.myliveevent.classes.AspectFrameLayout>
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:padding="@dimen/width_16"
+        android:id="@+id/layoutContents"
+
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:id="@+id/pdfContainer"
+            android:orientation="vertical"
+            android:background="@android:color/holo_blue_light"
+            android:layout_gravity="center_horizontal|top">
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_pdf_buttn"
+            android:id="@+id/pdfButton"
+            android:layout_gravity="bottom" />
 
 
     </FrameLayout>

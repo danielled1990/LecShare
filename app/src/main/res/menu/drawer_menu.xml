@@ -4,14 +4,14 @@
 
         <item android:id="@+id/home_id" android:title="Home Page"
             android:icon="@drawable/home_icon"></item>
-        <item android:id="@+id/search_id" android:title="Search Class"
+        <item android:id="@+id/search_class_id" android:title="Search Class"
             android:icon="@drawable/search_icon"></item>
-        <item android:id="@+id/edit_id" android:title="Edit Details"
-            android:icon="@drawable/edit_icon"></item>
-        <item android:id="@+id/delete_id" android:title="Delete"
-            android:icon="@drawable/delete_icon"></item>
-        <item android:id="@+id/calender_id" android:title="Calender"
-            android:icon="@drawable/calendar_icon"></item>
+        <item android:id="@+id/edit_user_id" android:title="Edit User Details"
+            android:icon="@mipmap/ic_edit_circle_dark"></item>
+        <item android:id="@+id/edit_courses_id" android:title="Edit My Courses"
+            android:icon="@mipmap/ic_edit_circle_dark"></item>
+        <!--<item android:id="@+id/add_courses_id" android:title="Add Courses"-->
+            <!--android:icon="@drawable/plus_green"></item>-->
     </group>
 
     <item android:title="social">

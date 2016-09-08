@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //  requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.main_container, new HomeFragment());
         fragmentTransaction.commit();
+
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -89,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
                         });
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
+                        break;
+                    case R.id.search_class_id:
+                        break;
+                    case R.id.edit_user_id:
+                        break;
+                    case R.id.edit_courses_id: startActivity(new Intent(MainActivity.this,EditUserCourses.class));
+                        break;
+
 
                 }
 
@@ -107,14 +117,17 @@ public class MainActivity extends AppCompatActivity {
                // startActivity(new Intent(MainActivity.this,AppSplash.class));
             }
         });
-//        button_start_new = (ImageButton) findViewById(R.id.add_button);
-//        button_start_new.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setChosenCourse();
-//                //startActivity(new Intent(MainActivity.this,AppSplash.class));
-//            }
-//        });
+
+        button_start_new = (ImageButton) findViewById(R.id.add_button);
+        button_start_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setChosenCourse();
+                startActivity(new Intent(MainActivity.this,AppSplash.class));
+            }
+        });
+
+
         textViewWelcome = (TextView) findViewById(R.id.welcome_user);
         String message = getIntent().getStringExtra("message");
         textViewWelcome.setText(message);
@@ -123,14 +136,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setChosenCourse();
-                startActivity(new Intent(MainActivity.this,AppSplash.class));
+               // startActivity(new Intent(MainActivity.this,AppSplash.class));
             }
         });
     }
 
     private void setChosenCourse()
     {
-        int pos =courseSpinner.getSelectedItemPosition();
+        int pos = courseSpinner.getSelectedItemPosition();
         ChosenCourse = UserInfoSingelton.getInstance().getUserCourses().get(pos);
         LessonSingelton.getInstanceSingelton().setLessonCourse(ChosenCourse);
     }
@@ -141,26 +154,31 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-    public void showAlertWatchRecord(View view) {
+//    public void showAlertWatchRecord(View view) {
+//
+//        setChosenCourse();//**************
+//
+//
+//        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+//        myAlert.setTitle("Live Streaming Now!");
+//        myAlert.setIcon(R.drawable.stream_black);
+//        myAlert.setMessage("Live streaming is happening now. Would you like to join?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+//            }
+//        });
+//        myAlert.setNegativeButton("No", new DialogInterface.OnClickListener() { //נפתח שיעור חדש
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startActivity(new Intent(MainActivity.this,AppSplash.class));
+//            }
+//        });
+//        myAlert.show();
+//    }
 
-        setChosenCourse();//**************
-        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-        myAlert.setTitle("Live Streaming Now!");
-        myAlert.setIcon(R.drawable.stream_black);
-        myAlert.setMessage("Live streaming is happening now. Would you like to join?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
-            }
-        });
-        myAlert.setNegativeButton("No", new DialogInterface.OnClickListener() { //נפתח שיעור חדש
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(MainActivity.this,AppSplash.class));
-            }
-        });
-        myAlert.show();
-    }
+
+
     public void goStream(View view) {
         Intent intent = new Intent(MainActivity.this,AppSplash.class);
         startActivity(intent);
@@ -183,8 +201,9 @@ public class MainActivity extends AppCompatActivity {
         {
             coursesNames.add(courses.get(i).getCourseName());
         }
-
-
     }
+
+
+
 
 }

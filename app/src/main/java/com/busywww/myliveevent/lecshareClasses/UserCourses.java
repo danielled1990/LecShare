@@ -54,7 +54,7 @@ public class UserCourses extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_courses);
 
-
+        coursesNames = new ArrayList<>();
         try {
             UploadCourseToSql getCourses = new UploadCourseToSql(GET_COURSES, UserInfoSingelton.getInstance().getUserSchool());
 
@@ -73,7 +73,7 @@ public class UserCourses extends Activity {
 
         if(CourseUpdate.Courses.size() != 0)
         {
-            addItemsOnCoursesSpinner(CourseUpdate.Courses);
+            coursesNames = addItemsOnCoursesSpinner(CourseUpdate.Courses);
             addItemsOnSemesterSpinner(CourseUpdate.Courses);
         }
 
@@ -84,15 +84,15 @@ public class UserCourses extends Activity {
     }
 
 
-    private void addItemsOnCoursesSpinner(ArrayList<Course> courses) {
-        coursesNames = new ArrayList<>();
+    public static ArrayList<String> addItemsOnCoursesSpinner(ArrayList<Course> courses) {
+      ArrayList<String>  coursesNames = new ArrayList<>();
 
         for(int i=0;i<courses.size();i++)
         {
             coursesNames.add(courses.get(i).getCourseName());
         }
 
-
+        return  coursesNames;
     }
 
     private void addItemsOnSemesterSpinner(ArrayList<Course> courses) {

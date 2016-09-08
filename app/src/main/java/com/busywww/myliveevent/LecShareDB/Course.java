@@ -10,14 +10,16 @@ public class Course {
     private String mCourseName;
     private int mCourseId;
     private String mSchool;
+    private int mYear;
 
-    public Course(int courseID,String courseName,String school, String lecturer,String semester)
+    public Course(int courseID,String courseName,String school, String lecturer,String semester,int year)
     {
         this.mCourseId = courseID;
         this.mCourseName = courseName;
         this.mSchool = school;
         this.mLecturer = lecturer;
         this.mSemester = semester;
+        this.mYear = year;
     }
 
     public int getCourseId()
@@ -32,6 +34,7 @@ public class Course {
     {
         return mCourseName;
     }
+    public int getYear(){return mYear;}
 
     public String getSchool()
     {

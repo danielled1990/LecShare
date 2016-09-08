@@ -1,5 +1,6 @@
 package com.busywww.myliveevent.LecShareDB;
 
+import com.busywww.myliveevent.util.Constants;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -20,9 +21,9 @@ public class CourseUpdate extends SqlConnection {
 
     public static ArrayList<Course> Courses;
 
-    public CourseUpdate(int courseID,String courseName,String school,String semester, String lecturer)
+    public CourseUpdate(int courseID,String courseName,String school,String semester, String lecturer,int year)
     {
-        mCourse = new Course(courseID,courseName,school,semester, lecturer);
+        mCourse = new Course(courseID,courseName,school,semester, lecturer,year);
         Courses = new ArrayList<>();
        // UploadCourseToSql uploadCourse = new UploadCourseToSql(mCourse);
 
@@ -32,15 +33,15 @@ public class CourseUpdate extends SqlConnection {
     public static int getLastLessonNumFromCourse(String CourseName)
     {
 
-        int lastLessonNum = -1;
-        int LessonNum = -1;
+        int lastLessonNum = 0;
+        int LessonNum = 0;
       //  java.sql.Date sqlDate;
         java.util.Date newDate;
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT lessonNum,date ");
-        query.append("FROM lesson ");
-        query.append(String.format("WHERE course = '%s' and lessonNum = (SELECT MAX(lessonNum) FROM lesson);",CourseName));
+        query.append("FROM lecshare.lesson ");
+        query.append(String.format("WHERE lessonNum = (SELECT MAX(lessonNum) FROM lecShare1.lesson WHERE course = '%s'); ",CourseName));
 
         try{
             Statement statement = dbConnection.createStatement();
@@ -83,7 +84,7 @@ public class CourseUpdate extends SqlConnection {
 
         try {
             dbConnection.setAutoCommit(false);
-            query = new StringBuilder("INSERT INTO courses (courseID, name, school,lecturer,semester) values (?,?,?,?,?)");
+            query = new StringBuilder("INSERT INTO courses (courseID, name, school,lecturer,semester,year) values (?,?,?,?,?,?)");
             stm = (PreparedStatement) dbConnection.prepareStatement(query.toString());
             for (int i = 0; i < courses.size(); i++) {
                 stm.setNull(1, java.sql.Types.INTEGER);
@@ -91,6 +92,7 @@ public class CourseUpdate extends SqlConnection {
                 stm.setString(3, courses.get(i).getSchool());
                 stm.setString(4, courses.get(i).getLecturer());
                 stm.setString(5, courses.get(i).getSemester());
+                stm.setInt(6,courses.get(i).getYear());
                 stm.addBatch();
 
             }
@@ -116,34 +118,49 @@ public class CourseUpdate extends SqlConnection {
 
      Statement  stm = dbConnection.createStatement();
 
-     StringBuilder query = new StringBuilder("SELECT * FROM lecshare.course ");
+     StringBuilder query = new StringBuilder("SELECT * FROM lecShare1.course ");
      query.append(String.format("WHERE school = '%s';",school));
         ResultSet rst;
         rst = stm.executeQuery(query.toString());
        ArrayList<Course> courses = new ArrayList<>();
         while (rst.next()) {
-            Course course = new Course(rst.getInt("courseID"), rst.getString("name"), rst.getString("school"), rst.getString("lecturer"),rst.getString("semester"));
+            Course course = new Course(rst.getInt("courseID"), rst.getString("name"), rst.getString("school"), rst.getString("lecturer"),
+                    rst.getString("semester"),rst.getInt("year"));
             courses.add(course);
-            int size = courses.size();
+
         }
          stm.close();
          return courses;
     }
 
-    public static void setUserCourses()
+    public static void setUserCourses(int coursesType)
     {
+        int i;
         UserInfoSingelton userData = UserInfoSingelton.getInstance();
         int id = userData.getUserID();
         StringBuilder query;
         PreparedStatement stm = null;
+        ArrayList<Course> courses = new ArrayList<>();
+        int size = 0;
+
+        switch (coursesType)
+        {
+            case Constants.REGISTER_COURSES:
+                courses = userData.getUserCourses();
+                size = userData.getUserCourses().size();
+                break;
+            case Constants.UPDATE_COURSES:
+                courses = userData.getCoursesToUpdate();
+                size = userData.getCoursesToUpdate().size();
+        }
 
         try {
             dbConnection.setAutoCommit(false);
-            query = new StringBuilder("INSERT INTO lecshare.usercourse (courseID, userID) values (?,?)");
+            query = new StringBuilder("INSERT INTO lecShare1.usercourse (userID,courseID) values (?,?)");
             stm = (PreparedStatement) dbConnection.prepareStatement(query.toString());
-            for (int i = 0; i < userData.getUserCourses().size(); i++) {
-                stm.setInt(1,userData.getUserCourses().get(i).getCourseId());
-                stm.setInt(2,id);
+            for ( i = 0; i < size; i++) {
+                stm.setInt(1,id);
+                stm.setInt(2,courses.get(i).getCourseId());
                 stm.addBatch();
 
             }
@@ -161,7 +178,67 @@ public class CourseUpdate extends SqlConnection {
                 }
             }
         }
+
+        if(coursesType == Constants.UPDATE_COURSES)
+        {
+            userData.AddNewCourses();
+        }
 }
+
+
+    public static void DeleteUserCourses()
+    {
+        StringBuilder query;
+        PreparedStatement stm = null;
+        UserInfoSingelton userData = UserInfoSingelton.getInstance();
+        ArrayList<Course> deleteCourses = userData.getCoursesToDelete();
+        int userID = userData.getUserID();
+
+        try {
+            dbConnection.setAutoCommit(false);
+            query = new StringBuilder("DELETE FROM lecShare1.usercourse ");
+            query.append("WHERE userID = ? and courseID = ?; ");
+
+            stm = ((PreparedStatement) dbConnection.prepareStatement(query.toString()));
+            for (int i = 0; i < deleteCourses.size(); i++) {
+                stm.setInt(1,userID);
+                stm.setInt(2,deleteCourses.get(i).getCourseId());
+                stm.addBatch();
+
+            }
+            stm.executeBatch();
+            dbConnection.commit();
+            stm.close();
+
+        } catch(SQLException ex){
+            if(dbConnection != null){
+                try{
+                    dbConnection.rollback();
+                }catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        finally{
+            try{
+                dbConnection.setAutoCommit(true);
+            }catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+
+            userData.DeleteCourses();
+
+        }
+
+
+
+
+
+
+    }
 
 
     }

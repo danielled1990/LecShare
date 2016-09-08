@@ -3,39 +3,41 @@
     android:orientation="vertical"
     android:id="@+id/pdf_fragment"
     android:layout_gravity="center_horizontal|top"
-    android:background="#e2f4fb"
+    android:background="#ffcaca"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="230dp"
     android:weightSum="1">
 
 
     <ImageView
         android:id="@+id/imageSlide"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
+        android:gravity="center_horizontal|top"
         android:background="#ffcaca" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="match_parent"
         android:measureWithLargestChild="true"
-        android:background="#e5caf2"
         android:orientation="horizontal"
         android:gravity="center_horizontal|bottom">
 
-        <Button
+        <ImageButton
+            android:visibility="visible"
+            android:src="@mipmap/next2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next"
             android:id="@+id/next"
-            android:layout_gravity="right|center_vertical" />
+            android:layout_gravity="bottom|center_vertical" />
 
-        <Button
+        <ImageButton
+            android:visibility="visible"
+            android:src="@mipmap/prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:text="Previous"
+            android:layout_gravity="bottom|center_vertical"
             android:id="@+id/previous" />
 
         <!--<ImageButton-->

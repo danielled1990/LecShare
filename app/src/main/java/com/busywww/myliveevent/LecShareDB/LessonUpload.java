@@ -50,7 +50,7 @@ public class LessonUpload extends SqlConnection {
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 
             PreparedStatement pre;
-            pre = dbConnection.prepareStatement("INSERT INTO Lesson (idLesson, lessonNum,date,course,videoId,pdfPlayer,lessonPhotos)  values (?,?,?,?,?,?,?)");
+            pre = dbConnection.prepareStatement("INSERT INTO lecShare1.lesson (idLesson, lessonNum,date,course,videoId,pdfPlayer,lessonPhotos)  values (?,?,?,?,?,?,?)");
             pre.setString(1,null);
             pre.setInt(2, LessonNUM);
             pre.setDate(3, sqlDate);
@@ -69,7 +69,7 @@ public class LessonUpload extends SqlConnection {
             dbConnection.commit();
 
             query = new StringBuilder("SELECT idLesson ");
-            query.append("FROM lecshare.lesson ");
+            query.append("FROM lecShare1.lesson ");
             query.append(String.format("WHERE videoId = '%s';", videoId));
             Statement selectIDStatement = dbConnection.createStatement();
 
@@ -104,7 +104,7 @@ public class LessonUpload extends SqlConnection {
 
         try {
             dbConnection.setAutoCommit(false);
-            query = new StringBuilder("INSERT INTO lecshare.course_lesson (lessonID, courseID) values (?,?)");
+            query = new StringBuilder("INSERT INTO lecShare1.course_lesson (lessonID, courseID) values (?,?)");
             stm = (com.mysql.jdbc.PreparedStatement) dbConnection.prepareStatement(query.toString());
             stm.setInt(1,lessonID);
             stm.setInt(2,courseID);

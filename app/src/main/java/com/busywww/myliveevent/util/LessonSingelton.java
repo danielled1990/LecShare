@@ -46,18 +46,10 @@ public class LessonSingelton {
         mPage = page;
 
         pdfPlayer.add(new PdfPlayer(mHours,mMinutes,mSeconds,mPage));
-        index++;
-       // getArray();
-      //  array.add(new LessonSingelton(mHours,mMinutes,mSeconds,mPage,null));
+
 
     }
 
-//    public ArrayList<LessonSingelton> getArray(){
-//        if(array == null){
-//            array = new ArrayList<>();
-//        }
-//        return array;
-//    }
 
     public void addToImageLink(String add){
         imageLink.add(add);
@@ -68,8 +60,9 @@ public class LessonSingelton {
 
 
     public void addToPdfImageLinks(String pdfUrl) {
+        index++;
         pdfPlayer.get(index).setPdfURL(pdfUrl);
-       // pdfImageLinks.add(pdfUrl);
+
     }
 
     public ArrayList<PdfPlayer> getPdfPlayer()
@@ -127,10 +120,20 @@ public class LessonSingelton {
 
 
     public void cleararrays(){
-      //  array.clear();
+
         pdfImageLinks.clear();
         imageLink.clear();
 
+    }
+
+    public void setPdfOn()
+    {
+        isPdf = true;
+    }
+
+    public void setNoPdf()
+    {
+        isPdf = false;
     }
 
     public int getLessonID()

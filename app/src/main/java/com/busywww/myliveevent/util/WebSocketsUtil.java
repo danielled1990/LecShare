@@ -23,7 +23,7 @@ public class WebSocketsUtil {
     private URI uri;
     private int pageIndex;
     public void connectToWebSocketServer(){
-        String url = "ws://192.168.43.234:8080/restapp/online";
+        String url = "ws://lecshare.us-west-2.elasticbeanstalk.com:8080/restapp/online";
         final String TAG1 = "connectToWebSocketServer";
         try {
             this.uri = new URI(url);
@@ -110,7 +110,7 @@ public class WebSocketsUtil {
         }
     }
     public void connectToImageWebSocketServer(){
-        String url = "ws://192.168.43.234:8080/restapp/image";
+        String url = "ws://lecshare.us-west-2.elasticbeanstalk.com:8080/restapp/image";
         final String TAG1 = "connectToImageWebSocketServer";
         try {
             this.uri = new URI(url);

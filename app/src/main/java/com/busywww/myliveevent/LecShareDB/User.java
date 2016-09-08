@@ -56,7 +56,7 @@ public class User extends SqlConnection {
            stm = dbConnection.createStatement();
 
         StringBuilder query = new StringBuilder();
-        query.append("SELECT course.courseID,course.name,course.school,course.lecturer,course.semester ") ;
+        query.append("SELECT course.courseID,course.name,course.school,course.lecturer,course.semester,course.year ") ;
         query.append("FROM course JOIN usercourse ");
         query.append("ON course.courseID = usercourse.courseID ");
         query.append(String.format("WHERE usercourse.userID = '%d';", userID));
@@ -65,7 +65,7 @@ public class User extends SqlConnection {
         rst = stm.executeQuery(query.toString());
 
         while (rst.next()) {
-            Course course = new Course(rst.getInt("courseID"), rst.getString("name"), rst.getString("school"), rst.getString("lecturer"),rst.getString("semester"));
+            Course course = new Course(rst.getInt("courseID"), rst.getString("name"), rst.getString("school"), rst.getString("lecturer"),rst.getString("semester"),rst.getInt("year"));
             userData.AddUserCourse(course);
             int size = userData.getUserCourses().size();
         }
@@ -86,8 +86,8 @@ public class User extends SqlConnection {
         StringBuilder query = new StringBuilder();
 
         query.append("SELECT name,email,password,school,userID ");
-        query.append("FROM lecshare.userinfo ");
-        query.append(String.format("WHERE lecshare.userinfo.email = '%s' and lecshare.userinfo.password = '%s' ;", email,password));
+        query.append("FROM lecShare1.userinfo ");
+        query.append(String.format("WHERE lecShare1.userinfo.email = '%s' and lecShare1.userinfo.password = '%s' ;", email,password));
 
 
         try {
@@ -139,7 +139,7 @@ public class User extends SqlConnection {
 
 
             query = new StringBuilder("SELECT userID ");
-            query.append("FROM lecshare.userinfo ");
+            query.append("FROM lecShare1.userinfo ");
             query.append(String.format("WHERE email = '%s';", email));
             Statement selectIDStatement = dbConnection.createStatement();
 

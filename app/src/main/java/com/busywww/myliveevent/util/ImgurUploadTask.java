@@ -24,19 +24,18 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
     private static final String TAG = ImgurUploadTask.class.getSimpleName();
     private int i;
     private static final String UPLOAD_URL = "https://api.imgur.com/3/image";
-    private boolean isPhoto;
     private Activity mActivity;
     private Bitmap mImageBitmap;
     private ByteArrayOutputStream stream;
     private String[] mImgurUrl;
 
-    public ImgurUploadTask(Bitmap bitmap, Activity activity,String[] mImgurUrl,boolean  isPhoto) {
+    public ImgurUploadTask(Bitmap bitmap, Activity activity,String[] mImgurUrl) {
       //  this.mImageUri = imageUri;
         mImageBitmap = bitmap;
 
         this.mActivity = activity;
         this.mImgurUrl = mImgurUrl;
-        this.isPhoto = isPhoto;
+
 
     }
 
@@ -45,7 +44,7 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         InputStream imageIn;
 
         stream = new ByteArrayOutputStream();
-        mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         mImageBitmap.getWidth();
         Log.d("doInBackground",Integer.toString(mImageBitmap.getHeight()));
 
@@ -58,8 +57,8 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         try {
             conn = (HttpURLConnection) new URL(UPLOAD_URL).openConnection();
             conn.setDoOutput(true);
-
             Authorization.getInstance().addToHttpURLConnection(conn);
+
 
             OutputStream out = conn.getOutputStream();
 
@@ -124,20 +123,17 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
 
         Log.i(TAG, "new imgur url: http://imgur.com/" + id + " (delete hash: " + deletehash + ")");
         mImgurUrl[0] = "http://imgur.com/" + id;
-        if(isPhoto)  {
+        if(PdfView.photoTaken)  {
 
-        //   if( LessonSingelton.getInstanceSingelton().getIsPdf()){
             LessonSingelton.getInstanceSingelton().addToImageLink(mImgurUrl[0]);
-            //LessonSingelton.getInstanceSingelton().setIsPdf(false);
+            PdfView.photoTaken = false;
         }
         else{
 
             LessonSingelton.getInstanceSingelton().addToPdfImageLinks(mImgurUrl[0]);
         }
 
-       /* int index = LessonSingelton.getInstanceSingelton().getIndex();
-        LessonSingelton.getInstanceSingelton().getArray().get(index).setImageLink(mImgurUrl[0]);
-        LessonSingelton.getInstanceSingelton().incIndex();*/
+
 
         return id;
     }
