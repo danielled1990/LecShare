@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:gravity="center_horizontal|top"
-        android:background="#ffcaca" />
+        android:background="@color/white" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
@@ -22,14 +22,16 @@
         android:layout_height="match_parent"
         android:measureWithLargestChild="true"
         android:orientation="horizontal"
+        android:background="@color/white"
         android:gravity="center_horizontal|bottom">
 
         <ImageButton
             android:visibility="visible"
-            android:src="@mipmap/next2"
+            android:src="@mipmap/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/next"
+            android:background="@color/white"
             android:layout_gravity="bottom|center_vertical" />
 
         <ImageButton
@@ -37,6 +39,7 @@
             android:src="@mipmap/prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:layout_gravity="bottom|center_vertical"
             android:id="@+id/previous" />
 

@@ -40,7 +40,7 @@ public class CourseUpdate extends SqlConnection {
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT lessonNum,date ");
-        query.append("FROM lecshare.lesson ");
+        query.append("FROM lecShare1.lesson ");
         query.append(String.format("WHERE lessonNum = (SELECT MAX(lessonNum) FROM lecShare1.lesson WHERE course = '%s'); ",CourseName));
 
         try{

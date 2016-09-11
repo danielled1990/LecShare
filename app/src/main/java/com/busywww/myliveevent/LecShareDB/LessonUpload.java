@@ -32,16 +32,7 @@ public class LessonUpload extends SqlConnection {
         try{
             dbConnection.setAutoCommit(false);
             Gson  gson = new Gson();
-          //  JSONObject pdfPlayerJson = new JSONObject();
-          //  jsonPut(pdfPlayerJson,"pdfPlayer",pdfPlayerArray);
 
-          //  ArrayList<pdf1> pdfA =  new ArrayList<>();
-           // for(int i = 0; i< LessonSingelton.getInstanceSingelton().getArray().size(); i++){
-              //  LessonSingelton.getInstanceSingelton().getArray().get(i).setImageLink(LessonSingelton.getInstanceSingelton().getPdfImageLinks().get(i));
-           // }
-
-
-            //   String res = gson.toJson(LessonSingelton.getInstanceSingelton().getArray());
                 String res = gson.toJson(LessonSingelton.getInstanceSingelton().getPdfPlayer());
 
 

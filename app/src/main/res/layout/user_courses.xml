@@ -5,14 +5,17 @@
     android:background="#dfc7ed">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:text="Save and Start"
+        android:textSize="18dp"
         android:id="@+id/save_start"
-        android:layout_gravity="center_horizontal"
+        android:background="@drawable/yello"
+        android:layout_gravity="center|bottom"
+
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button" />
+        android:layout_toRightOf="@+id/semester_spinner"
+        android:layout_toEndOf="@+id/semester_spinner" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,8 +35,7 @@
         android:id="@+id/course_spinner"
         android:background="@android:drawable/btn_dropdown"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/to_hour_spinner"
-        android:layout_alignStart="@+id/to_hour_spinner" />
+         />
     <Spinner
         android:layout_width="120dp"
         android:layout_height="48dp"
@@ -49,8 +51,7 @@
         android:id="@+id/semester"
         android:layout_marginTop="54dp"
         android:layout_below="@+id/courseText"
-        android:layout_alignLeft="@+id/to_hour_spinner"
-        android:layout_alignStart="@+id/to_hour_spinner" />
+        />
 
     <!--<Button-->
         <!--style="?android:attr/buttonStyleSmall"-->

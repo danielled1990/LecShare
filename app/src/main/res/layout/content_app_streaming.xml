@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -44,31 +43,6 @@
 
         </FrameLayout>
 
-        <!--<ImageView-->
-            <!--android:layout_width="@dimen/width_48"-->
-            <!--android:layout_height="@dimen/width_48"-->
-            <!--android:id="@+id/imageViewSwitchCamera"-->
-            <!--android:layout_gravity="top|left"-->
-            <!--android:layout_margin="@dimen/width_8"-->
-            <!--android:src="@drawable/ic_action_switch_video"-->
-            <!--android:background="@drawable/btn_circle_padding_src_2"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:layout_marginLeft="@dimen/width_4"-->
-            <!--android:scaleType="center" />-->
-
-        <ImageView
-            android:layout_width="@dimen/width_48"
-            android:layout_height="@dimen/width_48"
-            android:id="@+id/imageViewFlash"
-            android:layout_gravity="top|right"
-            android:layout_margin="@dimen/width_8"
-            android:src="@drawable/ic_action_flash_off"
-            android:background="@drawable/btn_circle_padding_src_2"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginLeft="@dimen/width_4"
-            android:scaleType="center" />
 
         <Chronometer
             android:layout_width="wrap_content"
@@ -96,19 +70,21 @@
             android:padding="53dp" />
 
         <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src= "@mipmap/stop_bttn"
-            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src= "@mipmap/stop"
+            android:background="@color/transparent"
+            android:id="@+id/imageButtonStop"
             android:layout_gravity="bottom|left" />
 
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="43dp"
-            android:src="@mipmap/ic_capture_buttn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@mipmap/camera_buttn"
             android:visibility="visible"
             android:baselineAlignBottom="false"
             android:clickable="true"
+            android:background="@color/transparent"
             android:id="@+id/imageCaptureButton"
             android:onClick="TakePhoto"
             android:layout_gravity="right|bottom" />
@@ -120,19 +96,20 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="301dp"
         android:padding="@dimen/width_16"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/layoutContents"
 
         android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="220dp"
             android:id="@+id/pdfContainer"
             android:orientation="vertical"
             android:background="@android:color/holo_blue_light"
-            android:layout_gravity="center_horizontal|top">
+            android:layout_gravity="center_horizontal">
 
         </LinearLayout>
 
@@ -141,7 +118,17 @@
             android:layout_height="40dp"
             android:src="@mipmap/ic_pdf_buttn"
             android:id="@+id/pdfButton"
-            android:layout_gravity="bottom" />
+            android:background="@color/transparent"
+            android:layout_gravity="left|bottom" />
+
+        <TextView
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textViewLessonName"
+            android:layout_gravity="center_horizontal|bottom" />
 
 
     </FrameLayout>

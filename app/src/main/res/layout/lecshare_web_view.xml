@@ -6,12 +6,10 @@
 
 
     <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/webView1"
+        android:id="@+id/webLecShare"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+
         />
-
-
-
 
 </RelativeLayout>

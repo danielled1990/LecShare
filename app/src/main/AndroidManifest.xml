@@ -63,8 +63,11 @@
             android:screenOrientation="landscape"></activity>
         <!--android:screenOrientation="portrait"-->
 
-        <activity android:name=".lecshareClasses.LecShareWeb"
-            ></activity>
+        <activity android:name=".lecshareClasses.LecShareWebOnlineLessons" ></activity>
+
+        <activity android:name=".lecshareClasses.LecShareWebRecordedLessons"></activity>
+        <activity android:name=".lecshareClasses.NewLiveLessonEvent"></activity>
+
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

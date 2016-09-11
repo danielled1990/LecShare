@@ -26,13 +26,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
-            <!--<com.android.volley.toolbox.NetworkImageView-->
-                <!--android:id="@+id/avatar"-->
-                <!--android:layout_width="@dimen/width_40"-->
-                <!--android:layout_height="@dimen/width_40"-->
-                <!--android:contentDescription="avatar"-->
-                <!--android:scaleType="centerCrop" />-->
-            <!--&lt;!&ndash;android:background="#1000"&ndash;&gt;-->
             <ImageView
             android:id="@+id/avatar"
             android:layout_width="@dimen/width_48"
@@ -74,35 +67,35 @@
                     android:layout_centerInParent="true" />
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/width_4"
-                android:background="@color/bwee"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/width_8">
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="@dimen/width_4"-->
+                <!--android:background="@color/bwee"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_margin="@dimen/width_8">-->
 
-                <Spinner
-                    android:layout_width="@dimen/width_104"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spinnerEventStatus"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/event_status"
-                    android:textAlignment="center"
-                    android:background="@android:color/transparent" />
+                <!--<Spinner-->
+                    <!--android:layout_width="@dimen/width_104"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/spinnerEventStatus"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:spinnerMode="dropdown"-->
+                    <!--android:entries="@array/event_status"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:background="@android:color/transparent" />-->
 
-                <ImageView
-                    android:layout_width="@dimen/width_16"
-                    android:layout_height="@dimen/width_16"
-                    android:id="@+id/imageView"
-                    android:src="@drawable/ic_action_arrow_down"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/width_2" />
-            </LinearLayout>
+                <!--<ImageView-->
+                    <!--android:layout_width="@dimen/width_16"-->
+                    <!--android:layout_height="@dimen/width_16"-->
+                    <!--android:id="@+id/imageView"-->
+                    <!--android:src="@drawable/ic_action_arrow_down"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:layout_marginRight="@dimen/width_2" />-->
+            <!--</LinearLayout>-->
         </RelativeLayout>
 
     </LinearLayout>

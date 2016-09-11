@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -47,7 +48,10 @@ import com.busywww.myliveevent.classes.AspectFrameLayout;
 import com.busywww.myliveevent.classes.MyCameraHelper;
 import com.busywww.myliveevent.classes.MyCameraPreview;
 import com.busywww.myliveevent.LecShareDB.UploadLessonToSql;
+import com.busywww.myliveevent.lecshareClasses.LecShareWebRecordedLessons;
 import com.busywww.myliveevent.lecshareClasses.LoginActivity;
+import com.busywww.myliveevent.lecshareClasses.MainActivity;
+import com.busywww.myliveevent.lecshareClasses.NewLiveLessonEvent;
 import com.busywww.myliveevent.util.LessonSingelton;
 import com.busywww.myliveevent.classes.YouTubeApi;
 import com.busywww.myliveevent.classes.YouTubeStreamer;
@@ -83,7 +87,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
 
     public static Chronometer mChronometer;
-    private long timeWhenStopped = 0;
+    private static long timeWhenStopped = 0;
     public ArrayList<LessonSingelton> pdfTimePlayerList;
 
     private static final int ACTIVITY_START_APP = 0;
@@ -116,18 +120,25 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
    // private static TextView textViewTitle;
     private static ImageView imageViewSwitchCamera;
     private static ImageButton imageButtonStart;
-    private static ImageView imageViewFlash;
+    private TextView courseName;
+   // private static ImageView imageViewFlash;
     private static ImageView imageViewPreview;
     private ImageButton imageCaptureButton;
-    private ImageView imageView;
+    private ImageButton imageButtonStop;
+
+
+
+    public static boolean mIsStreaming = false;
+    private static boolean mUseBackup = false;
+    private static YouTubeStreamer mStreamer = null;
+
 
     private PdfView pdfView;
     private WebSocketsUtil mWebSocketsUtil = new WebSocketsUtil();
     private ImageButton getPdf;
-    private String videoID;
     private boolean mWasStreamed = false;
-    private boolean onPause = false;
-
+    private  boolean onPause = false;
+    private long mLastStopTime = 0;
 
 
     /**
@@ -173,6 +184,30 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     }
 
+    private void chronoStart()
+    {
+        // on first start
+        if ( mLastStopTime == 0 )
+            mChronometer.setBase( SystemClock.elapsedRealtime() );
+            // on resume after pause
+        else
+        {
+            long intervalOnPause = (SystemClock.elapsedRealtime() - mLastStopTime);
+            mChronometer.setBase( mChronometer.getBase() + intervalOnPause );
+        }
+
+        mChronometer.start();
+    }
+
+
+    private void chronoPause()
+    {
+        mChronometer.stop();
+        mLastStopTime = SystemClock.elapsedRealtime();
+    }
+
+
+
     @Override
     public boolean onPageChanged(int page) {
 
@@ -182,8 +217,8 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         {
             LessonSingelton.getInstanceSingelton().SetHoursMinutesSeconds(getElapsedTime(),page);
 
-           // SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
-          //  upload.execute();
+          //  SendNextPage upload = new SendNextPage(page,mWebSocketsUtil);
+            //pload.execute();
             Toast.makeText(this, "Elapsed milliseconds: " + getElapsedTime(),
                     Toast.LENGTH_SHORT).show();
             pageChanged = true;
@@ -218,7 +253,13 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
             fab = (FloatingActionButton)findViewById(R.id.fab);
             fab.setVisibility(View.GONE);
 
-            mChronometer = (Chronometer)findViewById(R.id.chronometer) ;
+            SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+            String thisDate = currentDate.format(new Date());
+
+            courseName = (TextView)findViewById(R.id.textViewLessonName);
+            courseName.setText(MainActivity.ChosenCourse.getCourseName()+thisDate);
+
+            mChronometer = (Chronometer)findViewById(R.id.chronometer);
             cameraViewAfl = (AspectFrameLayout) findViewById(R.id.cameraView_afl);
             layoutCameraView = (FrameLayout) findViewById(R.id.layoutCameraView);
 
@@ -227,7 +268,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
             imageCaptureButton = (ImageButton) findViewById(R.id.imageCaptureButton);
 
            // imageViewSwitchCamera = (ImageView) findViewById(R.id.imageViewSwitchCamera);
-            imageViewFlash = (ImageView) findViewById(R.id.imageViewFlash);
+           // imageViewFlash = (ImageView) findViewById(R.id.imageViewFlash);
 
             imageViewPreview = (ImageView) findViewById(R.id.imageViewPreview);
             mPhotoCapturedImageView = (ImageView) findViewById(R.id.imageViewPreview);
@@ -243,24 +284,41 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                 @Override
                 public void onClick(View v) {
 
-//                    mActivity.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                         setOnPdf();
-//                        }
-//                    });
+                    if(!LessonSingelton.getInstanceSingelton().getIsPdf())
+                    {
+                        getPdf.setVisibility(View.INVISIBLE);
+                        showAlertSetPdf();
+                    }
+                   else
+                    {
+                        if (!mIsStreaming)
+                            {
+                                new CheckRtmpConnection().execute();
+                            }
+                            else
+                            {
 
-                    if (!mIsStreaming) {
-
-                        new CheckRtmpConnection().execute();
-                    } else {
-
-                        HandleStartStreaming();
+                                HandleStartStreaming();
+                            }
                     }
                 }
 
 
             });
+
+            imageButtonStop =(ImageButton) findViewById(R.id.imageButtonStop);
+            imageButtonStop.setOnClickListener(new View.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View v) {
+
+                                                       if(mIsStreaming || mWasStreamed)
+                                                       {
+                                                           new EndEventTask().execute(AppShared.SelectedEvent.GetEvent().getId());
+                                                           //finish();
+                                                       }
+                                                   }
+                                               });
+
 
             imageCaptureButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -297,12 +355,12 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
 
 
-            imageViewFlash.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    HandleFlashChange();
-                }
-            });
+//            imageViewFlash.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    HandleFlashChange();
+//                }
+//            });
 //            if (AppShared.SelectedEvent != null) {
 //                textViewTitle.setText(AppShared.SelectedEvent.GetTitle());
 //            }
@@ -325,27 +383,16 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     }
 
 
-    public void setOnPdf()
-    {
-
-        if(!LessonSingelton.getInstanceSingelton().getIsPdf() && !onPause) //&& !mWasStreamed
-        {
-            getPdf.setVisibility(View.INVISIBLE);
-            showAlertSetPdf();
-        }
-    }
-
     public void showAlertSetPdf() {
 
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-        myAlert.setTitle("Streaming must be synchronized with PDF !");
+        myAlert.setTitle("Set on a lesson pdf before start streaming !");
         myAlert.setIcon(R.mipmap.ic_pdf_buttn);
         myAlert.setMessage("Do you have a pdf to upload?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
              // open pdf
                 getPdf.performClick();
-
 
             }
         });
@@ -355,37 +402,14 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
                 LinearLayout pdfLayout =(LinearLayout)findViewById(R.id.pdfContainer);
                 pdfLayout.setBackgroundResource(R.drawable.learn);
-                pdfView.loadPicInsteadOfPDF();
-                onPageChanged(0);
+                LessonSingelton.getInstanceSingelton().setPdfOn();
+                imageButtonStart.performClick();
+
 
             }
         });
         myAlert.show();
     }
-
-//    public void showAlertStartStreaming()
-//    {
-//        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-//        myAlert.setMessage("You must now start streaming...").setPositiveButton("Start", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//               // imageButtonStart.performClick();
-//                startStream();
-//
-//            }
-//        });
-//        myAlert.setNegativeButton("Finish", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//                mActivity.finish();
-//
-//            }
-//        });
-//        myAlert.show();
-//
-//    }
-
 
 
     public long getElapsedTime() {
@@ -400,7 +424,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         }
 
     }
-
 
 
     @Override
@@ -448,20 +471,29 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public void onResume() {
 
         super.onResume();
-       // mChronometer.
+
+      if(mIsStreaming)
+      {
+          chronoStart();
+      }
     }
 
     @Override
     public void onPause() {
 
         super.onPause();
-   //     mChronometer.stop();
+        onPause = true;
+        chronoPause();
+
+
+
     }
 
     @Override
     public void onDestroy() {
 
         super.onDestroy();
+
         String courseName = LessonSingelton.getInstanceSingelton().getLessonCourse().getCourseName();
 
         if(mWasStreamed){
@@ -482,8 +514,10 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                 }
             }
             ReleaseOrientationEventListener();
-
             SetCameraPreviewStatus(false);
+
+            Intent intent = new Intent(AppStreaming.this,MainActivity.class);
+            startActivity(intent);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -500,6 +534,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     @Override
     public void onStart() {
         super.onStart();
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -553,9 +588,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
     public static Handler ResetCameraViewRatio = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-//            if (true) {
-//                return;
-//            }
 
             MyCameraPreview.AutoFeed = false;
 
@@ -900,9 +932,9 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                 }
             }
         }
-        if (!torch) {
-            imageViewFlash.setImageResource(R.drawable.ic_action_flash_off);
-        }
+//        if (!torch) {
+//            imageViewFlash.setImageResource(R.drawable.ic_action_flash_off);
+//        }
 
         // send preview
         if (!MyCameraPreview.AutoFeed) {
@@ -911,41 +943,41 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
         }
     }
 
-    private static void HandleFlashChange() {
-        try {
-            if (AppPreview == null) {
-                return;
-            }
-            Camera.Parameters parameters = AppPreview.CameraParameters;
-            boolean torch = false;
-            List<String> flashModes = parameters.getSupportedFlashModes();
-            if (flashModes == null) {
-                torch = false;
-            } else {
-                for (String mode : flashModes) {
-                    if (mode.equals("torch")) {
-                        torch = true;
-                    }
-                }
-            }
-            if (!torch) {
-                imageViewFlash.setImageResource(R.drawable.ic_action_flash_off);
-                return;
-            }
-            String flashMode = parameters.getFlashMode();
-            if (flashMode.equals("torch")) {
-                imageViewFlash.setImageResource(R.drawable.ic_action_flash_off);
-                parameters.setFlashMode("off");
-            } else {
-                imageViewFlash.setImageResource(R.drawable.ic_action_flash_on);
-                parameters.setFlashMode("torch");
-            }
-            AppPreview.AppCamera.setParameters(parameters);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void HandleFlashChange() {
+//        try {
+//            if (AppPreview == null) {
+//                return;
+//            }
+//            Camera.Parameters parameters = AppPreview.CameraParameters;
+//            boolean torch = false;
+//            List<String> flashModes = parameters.getSupportedFlashModes();
+//            if (flashModes == null) {
+//                torch = false;
+//            } else {
+//                for (String mode : flashModes) {
+//                    if (mode.equals("torch")) {
+//                        torch = true;
+//                    }
+//                }
+//            }
+//            if (!torch) {
+//                imageViewFlash.setImageResource(R.drawable.ic_action_flash_off);
+//                return;
+//            }
+//            String flashMode = parameters.getFlashMode();
+//            if (flashMode.equals("torch")) {
+//                imageViewFlash.setImageResource(R.drawable.ic_action_flash_off);
+//                parameters.setFlashMode("off");
+//            } else {
+//                imageViewFlash.setImageResource(R.drawable.ic_action_flash_on);
+//                parameters.setFlashMode("torch");
+//            }
+//            AppPreview.AppCamera.setParameters(parameters);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 //    private static void HandleShareEvent() {
 //        try {
@@ -955,9 +987,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 //        }
 //    }
 
-    public static boolean mIsStreaming = false;
-    private static boolean mUseBackup = false;
-    private static YouTubeStreamer mStreamer = null;
 
     @Override
     public void onStop() {
@@ -1009,10 +1038,6 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
         @Override
         protected void onPreExecute() {
-
-            //
-            // setOnPdf();
-
         }
 
         @Override
@@ -1047,6 +1072,7 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     }
 
+
     private void HandleStartStreaming() {
         try {
             if (mUseBackup) {
@@ -1068,22 +1094,9 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 //            }
 
 
-            if (!mIsStreaming) {
 
-                //boolean rtmpCheck = YouTubeApi.CheckRtmpConnection();
+            if (!mIsStreaming ) { //first time streaming
 
-//                Thread t = new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        YouTubeApi.rtmpConnectionSuccess = Helper.CheckTcpPortOpen2(YouTubeApi.youtube, 1935, 4000);
-//                    }
-//                });
-//                t.start();
-
-//                if (!YouTubeApi.rtmpConnectionSuccess) {
-//                    Snackbar.make(fab, "RTMP connection failed.", Snackbar.LENGTH_SHORT).show();
-//                    return;
-//                }
                 final ProgressDialog progressDialog = ProgressDialog.show(mActivity, null,
                         "Starting streaming...", true);
 
@@ -1119,65 +1132,52 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                             @Override
                             public void run() {
                                 mStreamer.RestartStream();
-                             /*   Thread thread = new Thread() {
-                                    @Override
-                                    public void run() {
-
-                                        synchronized (this) {
-
-
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    mChronometer.setBase(SystemClock.elapsedRealtime());
-                                                    mChronometer.start();
-                                                }
-                                            });
-
-                                        }
-
-                                    }
-
-
-                                };*/
-                             //   thread.start();
-
-                                mChronometer.setBase(SystemClock.elapsedRealtime());
-                                mChronometer.start();
+                                chronoStart();
                                 imageButtonStart.setImageResource(R.mipmap.ic_action_pause);
-//
-//
-
                                 mWasStreamed = true;
-
-
 
                             }
                         });
 
                     }
                 });
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mStreamer.PauseStream();
-                        timeWhenStopped = getElapsedTime();
-                        mChronometer.stop();
                         thread.start();
                     }
                 }, 10000);
 
 
                 mIsStreaming = true;
-            } else {
-//                mStreamer.StopStreaming();
-//                mStreamer = null;
-//                mIsStreaming = false;
+                mWasStreamed = true;
+
+
+            } else { // pause streaming ||
+
+
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mStreamer.PauseStream();
+                        mIsStreaming = false;
+                        imageButtonStart.setImageResource(R.mipmap.ic_action_start);
+
+                        onPause();
+
+
+                    }
+                });
+
+
+
 
 
 //
-                new EndEventTask().execute(AppShared.SelectedEvent.GetEvent().getId());
+            //    new EndEventTask().execute(AppShared.SelectedEvent.GetEvent().getId());
 
 
             }
@@ -1278,16 +1278,17 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
                 mChronometer.setVisibility(View.INVISIBLE);
 
             }
+
+            LessonSingelton.getInstanceSingelton().setNoPdf();
             mStreamer = null;
             mIsStreaming = false;
 
-            //finish();
-            AppShared.AdAction = AppShared.AdActionSplash;
-            if (fullscreenAd != null && fullscreenAd.isLoaded()) {
-                fullscreenAd.show();
-            } else {
-                ProcessUserAction(mActivity, mContext, AppShared.AdAction);
-            }
+            finish();
+//            if (fullscreenAd != null && fullscreenAd.isLoaded()) {
+//                fullscreenAd.show();
+//            } else {
+//                ProcessUserAction(mActivity, mContext, AppShared.AdActionGoMain);
+//            }
 
 
         }
@@ -1296,19 +1297,14 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
 
     private void loadAd() {
         try {
-            // debug
-            //AppShared.ShowAdView = false;
 
             AppShared.AdAction = AppShared.AdActionNone;
 
             RelativeLayout layoutContainer = (RelativeLayout) findViewById(R.id.layoutAdContainer);
 
             if (AppShared.ShowAdView) {
-                //final LinearLayout layoutAd = (LinearLayout) findViewById(R.id.layoutAdSplash);
-                //UtilGeneralHelper.InitMyAdView(mActivity, mContext, layoutAd, R.layout.fragment_ad_banner_myad);
 
                 Helper.InitMyAdView(mContext, layoutContainer);
-
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -1381,10 +1377,11 @@ public class AppStreaming extends AppCompatActivity implements PdfView.OnPdfPage
             switch (actionId) {
                 case AppShared.AdActionNone:
                     break;
-                case AppShared.AdActionSplash:
-//                    _intent = new Intent(context, AppSplash.class);
-//                    _intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                    activity.startActivity(_intent);
+                case AppShared.AdActionGoMain:
+
+                    _intent = new Intent(context, MainActivity.class);
+                    _intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                     activity.startActivity(_intent);
                     mActivity.finish();
                     break;
             }

@@ -47,6 +47,7 @@ public class AppShared {
     public static final int AdActionMain = 1;
     public static final int AdActionSplash = 2;
     public static final int AdActionView = 3;
+    public static final int AdActionGoMain = 4;
     public static int AdAction = AdActionNone;
 
 

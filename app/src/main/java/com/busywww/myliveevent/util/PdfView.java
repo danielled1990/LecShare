@@ -80,15 +80,6 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
 
 
 
-    public void loadPicInsteadOfPDF()
-    {
-       Bitmap picBitmap = BitmapFactory.decodeResource(LecShare.getAppContext().getResources(), R.drawable.learn);
-        MyImgurUploadTask uploadTask = new MyImgurUploadTask(picBitmap,mImageUrl);
-        uploadTask.execute();
-    }
-
-
-
     @Override
     public void onCapturePhoto(Bitmap capturedPhoto)
     {
@@ -283,11 +274,11 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
 
             }).start();
 
-//            if(!AppStreaming.mIsStreaming)
-//            {
-//                showAlertStartStreaming();
-//
-//            }
+           if(!AppStreaming.mIsStreaming)
+           {
+               showAlertStartStreaming();
+
+            }
 
         }
     }
@@ -401,10 +392,7 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
         protected void onPreExecute() {
             super.onPreExecute();
             mBitmap = Bitmap.createBitmap(REQ_WIDTH, REQ_HEIGHT, Bitmap.Config.ARGB_8888);
-//        if(!AppStreaming.mIsStreaming)
-//        {
-//            showAlertStartStreaming();
-//        }
+
 
         }
 
@@ -475,11 +463,6 @@ public class PdfView extends android.app.Fragment implements MyCameraPreview.OnC
 
             }
 
-//            if(!AppStreaming.mIsStreaming)
-//            {
-//                showAlertStartStreaming();
-//
-//            }
 
         }
     }

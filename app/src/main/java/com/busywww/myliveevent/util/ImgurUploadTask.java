@@ -122,7 +122,7 @@ public abstract class ImgurUploadTask extends AsyncTask<Void, Void, String> {
         String deletehash = root.getJSONObject("data").getString("deletehash");
 
         Log.i(TAG, "new imgur url: http://imgur.com/" + id + " (delete hash: " + deletehash + ")");
-        mImgurUrl[0] = "http://imgur.com/" + id;
+        mImgurUrl[0] = "http://imgur.com/" + id + ".png";
         if(PdfView.photoTaken)  {
 
             LessonSingelton.getInstanceSingelton().addToImageLink(mImgurUrl[0]);

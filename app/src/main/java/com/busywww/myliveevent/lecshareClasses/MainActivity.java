@@ -19,7 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.busywww.myliveevent.AppSplash;
+//import com.busywww.myliveevent.AppSplash;
 import com.busywww.myliveevent.LecShareDB.Course;
 import com.busywww.myliveevent.LecShareDB.UserInfoSingelton;
 import com.busywww.myliveevent.R;
@@ -34,19 +34,20 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> coursesNames;
     public static Course ChosenCourse;
+    private NewLiveLessonEvent mNewLessonCreate;
 
     DrawerLayout drawerLayout;
-    Toolbar toolbar;
-    ActionBarDrawerToggle actionBarDrawerToggle;
     Spinner courseSpinner;
-   // ArrayAdapter<CharSequence> adapterCourse;
     TextView textViewWelcome;
-    NavigationView navigationView;
-    FragmentTransaction fragmentTransaction;
     AlertDialog.Builder builder;
     Button button_join_live;
     Button button_watch_record;
-    ImageButton button_start_new;
+    Button button_start_new;
+
+    private ImageButton imageButtonLogout;
+    private Button buttonEditCourses;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -55,24 +56,87 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        //actionBarDrawerToggle.syncState();
+//        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+//        drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_container, new HomeFragment());
-        fragmentTransaction.commit();
-
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+         addItemsOnCoursesSpinner(UserInfoSingelton.getInstance().getUserCourses());
+         addListenerOnSpinnerCourseSelection();
+         button_watch_record = (Button) findViewById(R.id.button_watch);
+         button_watch_record.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.logout_id:
-                        builder = new AlertDialog.Builder(MainActivity.this);
+            public void onClick(View v) {
+                setChosenCourse();
+                Intent intent = new Intent(MainActivity.this,LecShareWebRecordedLessons.class);
+                startActivity(intent);
+            }
+        });
+
+        button_start_new = (Button) findViewById(R.id.add_button);
+        button_start_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setChosenCourse();
+              //  mNewLessonCreate = new NewLiveLessonEvent();
+               // mNewLessonCreate.CreateNewLiveLesson();
+               //startActivity(new Intent(MainActivity.this,AppSplash.class));
+                startActivity(new Intent(MainActivity.this,NewLiveLessonEvent.class));
+            }
+        });
+
+
+        textViewWelcome = (TextView) findViewById(R.id.welcome_user);
+        String message = getIntent().getStringExtra("message");
+        textViewWelcome.setText(message);
+        button_join_live = (Button) findViewById(R.id.button_join);
+        button_join_live.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    setChosenCourse();
+                    Intent intent = new Intent(MainActivity.this,LecShareWebOnlineLessons.class);
+                    startActivity(intent);
+            }
+        });
+
+        buttonEditCourses = (Button)findViewById(R.id.buttonCourses);
+        buttonEditCourses.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,EditUserCourses.class));
+            }
+
+        });
+
+        imageButtonLogout = (ImageButton)findViewById(R.id.logout);
+        imageButtonLogout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                showAlertLogout();
+            }
+
+        });
+
+
+    }
+
+    private void setChosenCourse()
+    {
+        int pos = courseSpinner.getSelectedItemPosition();
+        ChosenCourse = UserInfoSingelton.getInstance().getUserCourses().get(pos);
+        LessonSingelton.getInstanceSingelton().setLessonCourse(ChosenCourse);
+    }
+
+
+
+    public void showAlertLogout()
+    {
+        builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("Logging out...");
                         builder.setMessage("Are you sure you want to logout?.");
                         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -89,69 +153,9 @@ public class MainActivity extends AppCompatActivity {
                                 backgroundTask.execute("logout");
                             }
                         });
-                        AlertDialog alertDialog = builder.create();
+                       AlertDialog alertDialog = builder.create();
                         alertDialog.show();
-                        break;
-                    case R.id.search_class_id:
-                        break;
-                    case R.id.edit_user_id:
-                        break;
-                    case R.id.edit_courses_id: startActivity(new Intent(MainActivity.this,EditUserCourses.class));
-                        break;
 
-
-                }
-
-                return false;
-            }
-        });
-
-
-         addItemsOnCoursesSpinner(UserInfoSingelton.getInstance().getUserCourses());
-         addListenerOnSpinnerCourseSelection();
-         button_watch_record = (Button) findViewById(R.id.button_watch);
-         button_watch_record.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setChosenCourse();
-               // startActivity(new Intent(MainActivity.this,AppSplash.class));
-            }
-        });
-
-        button_start_new = (ImageButton) findViewById(R.id.add_button);
-        button_start_new.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setChosenCourse();
-                startActivity(new Intent(MainActivity.this,AppSplash.class));
-            }
-        });
-
-
-        textViewWelcome = (TextView) findViewById(R.id.welcome_user);
-        String message = getIntent().getStringExtra("message");
-        textViewWelcome.setText(message);
-        button_join_live = (Button) findViewById(R.id.button_join);
-        button_join_live.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setChosenCourse();
-               // startActivity(new Intent(MainActivity.this,AppSplash.class));
-            }
-        });
-    }
-
-    private void setChosenCourse()
-    {
-        int pos = courseSpinner.getSelectedItemPosition();
-        ChosenCourse = UserInfoSingelton.getInstance().getUserCourses().get(pos);
-        LessonSingelton.getInstanceSingelton().setLessonCourse(ChosenCourse);
-    }
-
-    @Override
-    protected void onPostCreate( Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
     }
 
 //    public void showAlertWatchRecord(View view) {
@@ -179,10 +183,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void goStream(View view) {
-        Intent intent = new Intent(MainActivity.this,AppSplash.class);
-        startActivity(intent);
-    }
 
     private void addListenerOnSpinnerCourseSelection() {
         courseSpinner = (Spinner) findViewById(R.id.choose_course_spinner);

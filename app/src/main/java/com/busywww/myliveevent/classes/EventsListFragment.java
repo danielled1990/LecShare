@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,7 +57,11 @@ public class EventsListFragment extends Fragment implements
     private static GridView mGridView;
     private static View mContainerView;
     private static TextView mEmptyView;
-    private static String[] mPrivacyList = { "unlisted", "private", "public"};
+    //private static String[] mPrivacyList = { "unlisted", "private", "public"};
+    private static List<YouTubeEventData> mEvents;
+    private ViewHolder mHolder;
+
+    public static void SetLessonEvents(List<YouTubeEventData> events){mEvents = events;}
 
     public EventsListFragment() {
     }
@@ -64,12 +69,6 @@ public class EventsListFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-//                .addApi(Plus.API)
-//                .addScope(Plus.SCOPE_PLUS_PROFILE)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .build();
         Connect();
     }
 
@@ -82,7 +81,10 @@ public class EventsListFragment extends Fragment implements
         mEmptyView = (TextView) mContainerView.findViewById(R.id.empty);
         mEmptyView.setText("No live events found.");
         mGridView.setEmptyView(mEmptyView);
+
         FloatingActionButton fabAddEvent = (FloatingActionButton) mContainerView.findViewById(R.id.fabNewEvent);
+
+        //Button startNewLiveLesson = (Button)mContainerView.findViewById(R.id.);
         fabAddEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +105,8 @@ public class EventsListFragment extends Fragment implements
         Disconnect();
         Connect();
     }
+
+
     public void Disconnect() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
         }
@@ -131,6 +135,8 @@ public class EventsListFragment extends Fragment implements
 
         mGridView.setAdapter(new LiveEventAdapter(events));
     }
+
+
     public void SetErrorMessage(String message) {
 
         if (mGridView != null) {
@@ -151,17 +157,7 @@ public class EventsListFragment extends Fragment implements
         } else {
             Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
             if (currentPerson.hasImage()) {
-                // Set the URL of the image that should be loaded into this view, and
-                // specify the ImageLoader that will be used to make the request.
 
-                //((NetworkImageView) getView().findViewById(R.id.avatar)).setImageUrl(currentPerson.getImage().getUrl(), mImageLoader);
-
-                // Loading image with placeholder and error image
-//                imageLoader.get(Const.URL_IMAGE, ImageLoader.getImageListener(
-//                        imageView, R.drawable.ico_loading, R.drawable.ico_error));
-
-
-                // If you are using normal ImageView
                 mImageLoader.get(currentPerson.getImage().getUrl(), new ImageLoader.ImageListener() {
 
                     @Override
@@ -185,36 +181,11 @@ public class EventsListFragment extends Fragment implements
                             RoundedBitmapDrawable drawable = Helper.GetRoundBitmapDrawable(getResources(), response.getBitmap());
                             ((ImageView) getView().findViewById(R.id.avatar))
                                     .setImageDrawable(drawable);
-//                            ((ImageView)getView().findViewById(R.id.avatar))
-//                                    .setImageBitmap(Helper.GetCircleImage(
-//                                            getActivity().getApplicationContext(),
-//                                            response.getBitmap(),
-//                                            getResources().getColor(R.color.bw00_60)));
+
                         }
                     }
                 });
 
-//                Person.Image image = currentPerson.getImage();
-//                new AsyncTask<String, Void, Bitmap>() {
-//
-//                    @Override
-//                    protected Bitmap doInBackground(String... params) {
-//
-//                        try {
-//                            URL url = new URL(params[0]);
-//                            InputStream in = url.openStream();
-//                            return BitmapFactory.decodeStream(in);
-//                        } catch (Exception e) {
-//                        /* TODO log error */
-//                        }
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    protected void onPostExecute(Bitmap bitmap) {
-//                        avatar.setImageBitmap(bitmap);
-//                    }
-//                }.execute(image.getUrl());
 
             }
             if (currentPerson.hasDisplayName()) {
@@ -243,7 +214,7 @@ public class EventsListFragment extends Fragment implements
                     .notifyDataSetChanged();
         }
 
-        SetProfileInfo();
+       // SetProfileInfo();
         mCallbacks.onConnected(Plus.AccountApi.getAccountName(mGoogleApiClient));
     }
 
@@ -302,7 +273,6 @@ public class EventsListFragment extends Fragment implements
         public void onEventPrivacyClicked(YouTubeEventData event);
     }
 
-    //private static YouTubeEventData mSelectedEventData;
 
     private static boolean mSkipChangeEvent = true;
 
@@ -348,7 +318,6 @@ public class EventsListFragment extends Fragment implements
         public View getView(final int position, View convertView, ViewGroup container) {
             View v = convertView;
 
-            //final YouTubeEventData eventData = mEvents.get(position);
             mSkipChangeEvent = true;
 
             if (v == null) {
@@ -377,19 +346,7 @@ public class EventsListFragment extends Fragment implements
                 mHolder = (ViewHolder)v.getTag();
                 //mHolder.Position = position;
             }
-//            int itemIndex = 0;
-//            String privacy = mEvents.get(mHolder.Position).GetPrivacyStatus().toLowerCase();
-//            if (privacy.equals("unlisted")) {
-//                itemIndex = 0;
-//            } else if (privacy.equals("private")) {
-//                itemIndex = 1;
-//            } else if (privacy.equals("public")) {
-//                itemIndex = 2;
-//            }
-//            int selectedPosition = mHolder.PrivacySpinner.getSelectedItemPosition();
-//            if (itemIndex != selectedPosition) {
-//                mHolder.PrivacySpinner.setSelection(itemIndex, false);
-//            }
+
             mHolder.Title.setText(mEvents.get(position).GetTitle());
             mHolder.Thumbnail.setImageUrl(mEvents.get(position).GetThumbUri(), mImageLoader);
             mHolder.Broadcast.setImageDrawable(mEvents.get(position).GetBroadcastRecordingStatusDrawable(getResources()));
@@ -404,14 +361,7 @@ public class EventsListFragment extends Fragment implements
                         }
                     }
             );
-            mHolder.LayoutEvent.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mCallbacks.onEventSelected(mEvents.get(position));
-                        }
-                    }
-            );
+
             mHolder.DeleteButton.setOnClickListener(
                     new View.OnClickListener() {
                         @Override
@@ -444,105 +394,37 @@ public class EventsListFragment extends Fragment implements
                         }
                     }
             );
-//            ArrayAdapter<String> privacyAdapter
-//                    = new PrivacyAdapter(getActivity().getApplicationContext(),
-//                    android.R.layout.simple_spinner_item,
-//                    android.R.id.text1, mPrivacyList);
-//            privacyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            mHolder.PrivacySpinner.setAdapter(privacyAdapter);
-//
-//            mHolder.PrivacySpinner.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    mSkipChangeEvent = true;
-//                    return false;
-//                }
-//            });
 
-            //spinnerPrivacy.setSelection(itemIndex, false);
-//            mHolder.PrivacySpinner.getViewTreeObserver().addOnGlobalLayoutListener(
-//                    new ViewTreeObserver.OnGlobalLayoutListener() {
-//
-//                        @Override
-//                        public void onGlobalLayout() {
-//                            // Ensure you call it only once works for JELLY_BEAN and later
-//                            //spinnerPrivacy.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                            mHolder.PrivacySpinner.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-//
-//                            // add the listener
-//                            mHolder.PrivacySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//                                @Override
-//                                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-//                                    if (mSkipChangeEvent) {
-////                                        mSkipChangeEvent = false;
-////                                        return;
-//                                    }
-//                                    mCallbacks.onEventPrivacyChanged(mEvents.get(mHolder.Position), mPrivacyList[pos]);
-//                                }
-//
-//                                @Override
-//                                public void onNothingSelected(AdapterView<?> arg0) {
-//                                }
-//
-//                            });
-//
-//                        }
-//                    });
-
-
-//            ((TextView)convertView.findViewById(R.id.textViewRecordingStatus)).setText(eventData.GetBroadcastRecordingStatus());
-//            ((TextView)convertView.findViewById(R.id.textViewStreamStatus)).setText(eventData.GetStreamStatus());
-//            ((TextView)convertView.findViewById(R.id.textViewPrivacy)).setText(eventData.GetPrivacyStatus());
 
             if (mGoogleApiClient.isConnected()) {
 //                ((PlusOneButton) convertView.findViewById(R.id.plus_button))
 //                        .initialize(event.GetWatchUri(), null);
             }
 
-
-
-//            spinnerPrivacy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                @Override
-//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    if (mSkipChangeEvent) {
-//                        mSkipChangeEvent = false;
-//                        return;
-//                    }
-//                    mCallbacks.onEventPrivacyChanged(eventData, mPrivacyList[position]);
-//                }
-//
-//                @Override
-//                public void onNothingSelected(AdapterView<?> parent) {
-//
-//                }
-//            });
-
-
             return v;
         }
     }
-    public class PrivacyAdapter extends ArrayAdapter {
-        private String[] items;
-
-        public PrivacyAdapter(Context context, int itemLayoutId, int textViewResourceId, String[] objects) {
-            super(context, itemLayoutId, textViewResourceId, objects);
-            items = objects;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = inflater.inflate(android.R.layout.simple_spinner_item, null);
-                String item = items[position];
-                TextView textView = (TextView) v.findViewById(android.R.id.text1);
-                textView.setText(item);
-            }
-            return v;
-        }
-
-    }
+//    public class PrivacyAdapter extends ArrayAdapter {
+//        private String[] items;
+//
+//        public PrivacyAdapter(Context context, int itemLayoutId, int textViewResourceId, String[] objects) {
+//            super(context, itemLayoutId, textViewResourceId, objects);
+//            items = objects;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            View v = convertView;
+//            if (v == null) {
+//                LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                v = inflater.inflate(android.R.layout.simple_spinner_item, null);
+//                String item = items[position];
+//                TextView textView = (TextView) v.findViewById(android.R.id.text1);
+//                textView.setText(item);
+//            }
+//            return v;
+//        }
+//
+//    }
 
 }
